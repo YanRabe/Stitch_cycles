@@ -1,4 +1,4 @@
-from svgpathtools import svg2paths
+from svgpathtools import svg2paths, paths2svg
 
 ###FIchier où on va mettre les fonctions pour ouvrir et renvoyer les svg
 #Req: svgpathtools
@@ -23,3 +23,12 @@ def pointCoord(svgpath):
             for i in range(len(path)):
                 print(path[i][0])
 
+def stitchEdges(A, B):
+    """créer un objet Line du package svgpathtools pour lier deux points.
+    Ne renvoie rien."""
+    pass
+def cyclesToGraph(paths):
+    pass
+
+def pathsToSvg(paths):
+    pass
