@@ -4,7 +4,7 @@ class Graphe:
         self.LgrapheAdj = [[0 for i in range(self.nbs)]for j in range(self.nbs)]
         self.LgrapheI = [[]for j in range(self.nbs)]
     
-    #yan + zizi = coeur
+    #réel + imaginaire + ratio
     def sommet(self):
         return [i for i in range(self.nbs)]
     
