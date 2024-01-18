@@ -1,4 +1,4 @@
-from svgpathtools import svg2paths, paths2svg
+from svgpathtools import svg2paths, paths2svg, Line, Path
 import numpy as np
 
 ###FIchier où on va mettre les fonctions pour ouvrir et renvoyer les svg
@@ -18,16 +18,20 @@ def pointCoord(svgpath):
     liste_de_point = []
     nb_path = 0 
     for path_discontinuous in paths:
+
         #print(f"path discontinuous: {path_discontinuous}")
         #print(f"continuous subpath: {path_discontinuous.continuous_subpaths()}")
+
         for path in path_discontinuous.continuous_subpaths():
+
             #print(f'path: {path}')
             liste_de_point.append([])
+
             for i in range(len(path)):
                 # print(path[i][0])
                 liste_de_point[nb_path].append(path[i][0])
             nb_path += 1
-    return liste_de_point
+    return  liste_de_point
 
 
 def energyCalc(edge1, edge2):
@@ -65,9 +69,15 @@ def stitchEdges(edge1, edge2):
 def cyclesToGraph(paths):
     pass
 
-def pathsToSvg(paths):
-    """
+def pathsToSvg(points):
+    """Prend des coordonnées svgpathtool.
+
+    les transforme en path
+
+    Renvoie un fichier svg.
     
     """
-    pass
+    lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
+    print(lines_list[0])
+    paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
     paths2svg.wsvg(paths, filename='output1.svg')
