@@ -32,6 +32,7 @@ def stitchEdges(A, B):
     """créer un objet Line du package svgpathtools pour lier deux points.
     Ne renvoie rien."""
     pass
+
 def cyclesToGraph(paths):
     pass
 
