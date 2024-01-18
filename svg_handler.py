@@ -55,11 +55,11 @@ def norm2(point_a, point_b):
     res = np.sqrt(difference[0]**2+difference[1]**2) #distance entre a et b (norme 2)
     return res
 
-def stitchEdges(A, B):
-    """créer un objet Line du package svgpathtools pour lier deux points.
+def stitchEdges(edge1, edge2):
+    '''
     
-    
-    """
+    '''
+
     pass
 
 def cyclesToGraph(paths):
@@ -67,3 +67,4 @@ def cyclesToGraph(paths):
 
 def pathsToSvg(paths):
     pass
+    paths2svg.wsvg(paths, filename='output1.svg')
