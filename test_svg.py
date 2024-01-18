@@ -1,4 +1,4 @@
-import svg_handler as svgh
+import svg_handler_test as svgh
 
-svgh.pointCoord('svg_entries\svg\simple.svg')
+print(len(svgh.pointCoord("svg_entries\svg\\brain_cycles.svg")))
 
