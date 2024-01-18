@@ -66,5 +66,8 @@ def cyclesToGraph(paths):
     pass
 
 def pathsToSvg(paths):
+    """
+    
+    """
     pass
     paths2svg.wsvg(paths, filename='output1.svg')
