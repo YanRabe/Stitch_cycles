@@ -72,7 +72,40 @@ def stitchEdges(edge1, edge2):
     pass
 
 def cyclesToGraph(paths):
-    pass
+    """_summary_
+    recupere le nom du fichier en entree et renvoie 3 listes:
+    -une liste contenant la totalite des points complexes
+    -une liste d'adajcence contenant une liste par point contenant l'indice du point suivant et du point precedent
+    -une liste contenant une liste par cycle, avec l'indice du point de depart et le nombre de points du cycle
+    """
+    liste_de_point_initiale = pointCoord(paths)
+    liste_d_adjacence = []
+    liste_indice_depart = [] #continent une liste par cycle avec l'indice de depart et le nombre de points du cycle
+    liste_de_point = [] #contient l'ensemble des points dans une seule liste
+    
+    for indice_cycle in range(len(liste_de_point_initiale)):
+        
+        liste_indice_depart.append([len(liste_de_point),len(liste_de_point_initiale[indice_cycle])])
+        
+        delta_nb_point = len(liste_de_point)
+        
+        liste_de_point += liste_de_point_initiale[indice_cycle]
+        
+        for indice_point in range(len(liste_de_point_initiale[indice_cycle])):
+            if indice_point == len(liste_de_point_initiale[indice_cycle])-1:
+                indice_suivant = 0 
+            else:
+                indice_suivant = indice_point + 1
+                
+            if indice_point == 0:
+                indice_precedent = len(liste_de_point_initiale[indice_cycle])-1
+            else:
+                indice_precedent = indice_point -1
+                
+            liste_d_adjacence.append([indice_suivant + delta_nb_point,indice_precedent+delta_nb_point])
+        
+    return liste_de_point,liste_d_adjacence,liste_indice_depart
+                
 
 def pathsToSvg(points):
     """Prend des coordonnées svgpathtool.
