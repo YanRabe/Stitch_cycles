@@ -1,0 +1,5 @@
+Tant que |C| >1:
+  k = arg du cycle avec le moins de edges
+  I, J(I) = le couple tel que l'énergie de patching est minimale
+  C = fonction StitchEdges(I,J) de taille |C|-1
+renvoie Cs
