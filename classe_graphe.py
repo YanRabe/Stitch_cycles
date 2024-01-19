@@ -4,7 +4,6 @@ class Graphe:
         self.LgrapheAdj = [[0 for i in range(self.nbs)]for j in range(self.nbs)]
         self.LgrapheI = [[]for j in range(self.nbs)]
     
-    #réel + imaginaire + ratioo
     def sommet(self):
         return [i for i in range(self.nbs)]
     
@@ -150,4 +149,5 @@ class Graphe:
         for i in range(len(self.LgrapheAdj)):
             for j in range(len(self.LgrapheAdj[i])):
                 if self.LgrapheAdj[i][j] != 0:
-                    self.grapheAdjDico[i][j] = self.LgrapheAdj[i][j]                                
+                    self.grapheAdjDico[i][j] = self.LgrapheAdj[i][j] 
+                                             
