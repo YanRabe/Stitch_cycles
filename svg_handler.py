@@ -1,8 +1,13 @@
 from svgpathtools import svg2paths, paths2svg, Line, Path
 import numpy as np
+import os
 
 ###FIchier où on va mettre les fonctions pour ouvrir et renvoyer les svg
 #Req: svgpathtools
+
+outputs_list = os.listdir("outputs") #list des outputs
+global number_outputs
+number_outputs = len(outputs_list)
 
 def pointCoord(svgpath):
     '''Récupère en entrée le nom du fichier
@@ -77,7 +82,8 @@ def pathsToSvg(points):
     Renvoie un fichier svg.
     
     """
+    global number_outputs
     lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
-    print(lines_list[0])
+    print(*lines_list)
     paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename='output1.svg')
+    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}.svg')
