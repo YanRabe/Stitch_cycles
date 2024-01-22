@@ -1,8 +1,12 @@
 from svgpathtools import svg2paths, paths2svg, Line, Path
-import numpy as np
+import os
 
 ###FIchier où on va mettre les fonctions pour ouvrir et renvoyer les svg
 #Req: svgpathtools
+
+outputs_list = os.listdir("outputs") #list des outputs
+global number_outputs
+number_outputs = len(outputs_list)
 
 def pointCoord(svgpath):
     '''Récupère en entrée le nom du fichier
@@ -34,37 +38,6 @@ def pointCoord(svgpath):
     return  liste_de_point
 
 
-def energyCalc(edge1, edge2):
-    """
-    Prend en entrée deux lignes (type liste) 
-
-    et renvoie l'énergie de 'patch' selon la formuleb pg 8.
-    """
-    res = min(norm2(edge1[0] - edge2[1])+ norm2(edge1[1] - edge2[0]), 
-              norm2(edge1[0] - edge2[0]) + norm2(edge1[1] - edge2[1])) 
-    
-    res -= norm2(edge1[0] - edge1[1]) - norm2(edge2[0]- edge2[1])
-    
-    return res
-
-def norm2(point_a, point_b):
-    """
-    Prend deux points complexes en entrée
-
-    calcule la différence
-
-    Renvoie la distance avec la norme euclidienne.
-    """
-    difference = (point_a.real - point_b.real, point_a.imag - point_b.imag) #différence des points a et b
-    res = np.sqrt(difference[0]**2+difference[1]**2) #distance entre a et b (norme 2)
-    return res
-
-def stitchEdges(edge1, edge2):
-    '''
-    
-    '''
-
-    pass
 
 def cyclesToGraph(paths):
     """_summary_
@@ -110,7 +83,8 @@ def pathsToSvg(points):
     Renvoie un fichier svg.
     
     """
+    global number_outputs
     lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
-    print(lines_list[0])
+    print(*lines_list)
     paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename='output1.svg')
+    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}.svg')
