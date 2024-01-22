@@ -31,6 +31,7 @@ def norm2(point_a, point_b):
     difference = (point_a.real - point_b.real, point_a.imag - point_b.imag) #différence des points a et b
     res = np.sqrt(difference[0]**2+difference[1]**2) #distance entre a et b (norme 2)
     return res
+    
 def listCoord(graph,cA):
     """
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
