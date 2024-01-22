@@ -1,5 +1,4 @@
 from svgpathtools import svg2paths, paths2svg, Line, Path
-import numpy as np
 import os
 
 ###FIchier où on va mettre les fonctions pour ouvrir et renvoyer les svg
