@@ -1,5 +1,5 @@
 from math import inf
-
+import svg_handler as svgh
 """
 Cycles --> liste: 
     -coord points 
@@ -30,11 +30,11 @@ def nearestCycle(graph, cA):
     liste_points, liste_adjacence, liste_indice_depart = graph
     liste_dist = []
     liste_edges = []
-    cycleA = listCoord(graph, cA)
+    cycleA = svgh.listCoord(graph, cA)
     for cB in range(len(liste_indice_depart)):
         min_Energy_Cyc = inf
         if cB != cA:
-            cycleB = listCoord(graph, cB)
+            cycleB = svgh.listCoord(graph, cB)
             edgeA, edgeB = None, None
             for coord in cycleB:
                 temp = nearestEdge2(cycleA,cycleA[:2],cycleB)
