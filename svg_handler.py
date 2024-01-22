@@ -38,12 +38,6 @@ def pointCoord(svgpath):
     return  liste_de_point
 
 
-def stitchEdges(edge1, edge2):
-    '''
-    
-    '''
-
-    pass
 
 def cyclesToGraph(paths):
     """_summary_

@@ -1,6 +1,7 @@
 from math import inf
 import svg_handler as svgh
 import numpy as np
+
 """
 Cycles --> liste: 
     -coord points 
@@ -11,12 +12,12 @@ def energyCalc(edge1, edge2):
     """
     Prend en entrée deux lignes (type liste) 
 
-    et renvoie l'énergie de 'patch' selon la formuleb pg 8.
+    et renvoie l'énergie de 'patch' selon la formule pg 8.
     """
-    res = min(norm2(edge1[0] - edge2[1])+ norm2(edge1[1] - edge2[0]), 
-              norm2(edge1[0] - edge2[0]) + norm2(edge1[1] - edge2[1])) 
+    res = min(norm2(edge1[0], edge2[1])+ norm2(edge1[1], edge2[0]), 
+              norm2(edge1[0], edge2[0]) + norm2(edge1[1], edge2[1])) 
     
-    res -= norm2(edge1[0] - edge1[1]) - norm2(edge2[0]- edge2[1])
+    res -= norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1])
     
     return res
 
@@ -39,7 +40,7 @@ def listCoord(graph,cA):
     """
     liste_points, liste_adjacence, liste_indice_depart = graph
     res = []
-    act = liste_indice_depart[cA]
+    act = liste_indice_depart[cA][0]
     for i in range(liste_indice_depart[cA][1]):
         res.append(liste_points[act])
         act = liste_adjacence[act][0]
@@ -52,14 +53,14 @@ def nearestCycle(graph, cA):
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     cA est l'indice du cycle dont on cherche le voisin le + proche;
     """
-    liste_points, liste_adjacence, liste_indice_depart = graph
+    _, _, liste_indice_depart = graph
     liste_dist = []
     liste_edges = []
-    cycleA = svgh.listCoord(graph, cA)
+    cycleA = listCoord(graph, cA)
     for cB in range(len(liste_indice_depart)):
         min_Energy_Cyc = inf
         if cB != cA:
-            cycleB = svgh.listCoord(graph, cB)
+            cycleB = listCoord(graph, cB)
             edgeA, edgeB = None, None
             for coord in cycleB:
                 temp = nearestEdge2(cycleA,cycleA[:2],cycleB)
@@ -72,7 +73,7 @@ def nearestCycle(graph, cA):
             liste_edges.append([None,None])
 
     minId = liste_dist.index(min(liste_dist))
-    return liste_dist[minId], liste_edges[minId]
+    return liste_dist[minId], *liste_edges[minId]
 
 def nearestEdge2(Ca, edgeA, Cb, expected = None):
     """
@@ -93,3 +94,15 @@ def nearestEdge2(Ca, edgeA, Cb, expected = None):
     if choixB == expected:
         return edgeA, choixB, minE
     return nearestEdge2(Cb, choixB, Ca, edgeA)
+
+
+def stitchEdges(cycles1, cycles2, to_stitch):
+    '''
+    Récupère la liste de coordonnées des deux cycles, ainsi que les deux edges à stitch. 
+
+    Recrée un objet de type path avec la liaison effectuée.
+    '''
+    pass
+
+    
+
