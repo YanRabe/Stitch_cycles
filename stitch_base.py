@@ -1,12 +1,36 @@
 from math import inf
 import svg_handler as svgh
+import numpy as np
 """
 Cycles --> liste: 
     -coord points 
     -ind points suiv - préc
     -ind point de départ + nb de points par cycle
 """
+def energyCalc(edge1, edge2):
+    """
+    Prend en entrée deux lignes (type liste) 
 
+    et renvoie l'énergie de 'patch' selon la formuleb pg 8.
+    """
+    res = min(norm2(edge1[0] - edge2[1])+ norm2(edge1[1] - edge2[0]), 
+              norm2(edge1[0] - edge2[0]) + norm2(edge1[1] - edge2[1])) 
+    
+    res -= norm2(edge1[0] - edge1[1]) - norm2(edge2[0]- edge2[1])
+    
+    return res
+
+def norm2(point_a, point_b):
+    """
+    Prend deux points complexes en entrée
+
+    calcule la différence
+
+    Renvoie la distance avec la norme euclidienne.
+    """
+    difference = (point_a.real - point_b.real, point_a.imag - point_b.imag) #différence des points a et b
+    res = np.sqrt(difference[0]**2+difference[1]**2) #distance entre a et b (norme 2)
+    return res
 def listCoord(graph,cA):
     """
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
