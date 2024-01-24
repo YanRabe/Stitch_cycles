@@ -114,7 +114,9 @@ def checkIfIntersecting(edge1, edge2):
     This linear system allows us to know if two edges under format (x1+y1j, x2+y2j) 
     intersect:
         
-        if s >= 0 and t <= 1
+        if s >= 0 and t <= 1, they do. 
+
+    Return True if so, else False.
     
     """
    
@@ -152,7 +154,8 @@ def stitchEdges(graph):
     liste_de_point,liste_d_adjacence,liste_indice_depart = graph
     edge1_ids, edge2_ids = nearestCycle(graph, 0)[1:]
     id_first_point = edge2_ids[0]
-    patch_pattern = selectCorrectPatchPattern
+    patch_pattern = selectCorrectPatchPattern([liste_de_point[edge1_ids[0]], liste_de_point[edge2_ids[0]]]
+                                              ,[liste_de_point[edge1_ids[1]], liste_de_point[edge2_ids[1]]])
 
     if patch_pattern == 'pattern_1':
         id_stitch_point = edge1_ids[1]
