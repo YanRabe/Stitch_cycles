@@ -149,12 +149,12 @@ def changeAdjacence(edge1_id,edge2_id,patch_pattern):
     '''
     global liste_d_adjacence
 
-    if patch_pattern == 'pattern2':
+    if patch_pattern == 'pattern_2':
         liste_d_adjacence[edge1_id[0]][0] == edge2_id[1]
         liste_d_adjacence[edge1_id[1]][1] == edge2_id[0]
 
         liste_d_adjacence[edge2_id[0]][0] == edge1_id[1]
-        liste_adjacence[edge2_id[1]][1] == edge1_id[0]
+        liste_d_adjacence[edge2_id[1]][1] == edge1_id[0]
     else:
         liste_d_adjacence[edge1_id[0]][0] == edge2_id[0]
         liste_d_adjacence[edge1_id[1]][1] == edge2_id[1]
