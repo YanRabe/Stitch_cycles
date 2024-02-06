@@ -184,15 +184,23 @@ def stitchEdges(graph):
     else:
         id_stitch_point = edge1_ids[0]
 
-    patching_order = [id_first_point]
-    i = 0
-    while patching_order[-1] != edge2_ids[1]:
-        res = liste_d_adjacence[patching_order[i]][0]
-        i += 1
-        patching_order.append(res)
-        print(f'each {patching_order}')
+    # patching_order = [id_first_point]
+    # i = 0
+    # while patching_order[-1] != edge2_ids[1]:
+    #     res = liste_d_adjacence[patching_order[i]][0]
+    #     i += 1
+    #     patching_order.append(res)
+    #     print(f'each {patching_order}')
+    first_stitch_id = liste_d_adjacence[id_first_point][0]
+    lines = [svgpt.Line(liste_de_point[id_first_point], liste_de_point[first_stitch_id])]
+    current_point_id = first_stitch_id
+    next_point_id = liste_d_adjacence[current_point_id][0]
 
-    lines = [svgpt.Line(liste_de_point[patching_order[i-1]], liste_de_point[patching_order[i]]) for i in range(len(patching_order))]
+    for i in range(len(liste_de_point)): 
+        lines.append(svgpt.Line(liste_de_point[current_point_id], liste_de_point[next_point_id]))
+        current_point_id = next_point_id
+        next_point_id = liste_d_adjacence[current_point_id][0]
+        
     print(lines)
     new_path = svgpt.Path(*lines)
     return new_path
