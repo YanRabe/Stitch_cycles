@@ -143,11 +143,10 @@ def selectCorrectPatchPattern(edge1, edge2):
     else:
         return 'pattern_1'
     
-def changeAdjacence(edge1_id,edge2_id,patch_pattern):
+def changeAdjacence(edge1_id,edge2_id,patch_pattern, liste_d_adjacence):
     '''
     change la liste d'adjacence pour sticher
     '''
-    global liste_d_adjacence
 
     if patch_pattern == 'pattern_2':
         liste_d_adjacence[edge1_id[0]][0] = edge2_id[1]
@@ -176,18 +175,24 @@ def stitchEdges(graph):
     patch_pattern = selectCorrectPatchPattern([liste_de_point[edge1_ids[0]], liste_de_point[edge2_ids[0]]]
                                               ,[liste_de_point[edge1_ids[1]], liste_de_point[edge2_ids[1]]])
 
+
+    liste_d_adjacence = changeAdjacence(edge1_ids, edge2_ids, patch_pattern, liste_d_adjacence)
+    print(liste_d_adjacence)
+    
     if patch_pattern == 'pattern_1':
         id_stitch_point = edge1_ids[1]
     else:
         id_stitch_point = edge1_ids[0]
-    
+
     patching_order = [id_first_point]
     i = 0
     while patching_order[-1] != edge2_ids[1]:
         res = liste_d_adjacence[patching_order[i]][0]
+        i += 1
         patching_order.append(res)
-    
-    # INSERT ADJACENT REMAPPING FUNC HERE
-    
-    new_path = svgpt.Path([svgpt.Line(liste_de_point[patching_order[i-1]], liste_de_point[patching_order[i]]) for i in range(len(liste_de_point))])
+        print(f'each {patching_order}')
+
+    lines = [svgpt.Line(liste_de_point[patching_order[i-1]], liste_de_point[patching_order[i]]) for i in range(len(patching_order))]
+    print(lines)
+    new_path = svgpt.Path(*lines)
     return new_path

@@ -3,7 +3,7 @@ import stitch_base as sb
 from svgpathtools import Path, Line
 
 path = svgh.pointCoord("svg_entries\svg\simple.svg")
-print(path)
+# print(path)
 #svgh.pathsToSvg(path)
 # path = svgh.pointCoord("svg_entries\svg\simple.svg")
 # print(path)
@@ -18,4 +18,7 @@ graph = svgh.cyclesToGraph("svg_entries\svg\simple.svg")
 # print("")
 # print(c)
 test = sb.nearestCycle(graph, 0)
-print(test)
+
+new_path = sb.stitchEdges(graph)
+print(new_path)
+svgh.pathsToSvg(new_path)
