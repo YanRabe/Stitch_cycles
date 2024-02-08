@@ -76,7 +76,7 @@ def cyclesToGraph(paths):
                 
 
 def pathsToSvg(points):
-    """Prend des coordonnées svgpathtool.
+    """Prend des coordonnées complexes.
 
     les transforme en path
 
