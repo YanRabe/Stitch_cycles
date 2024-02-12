@@ -10,7 +10,7 @@ from svgpathtools import Path, Line
 # svgh.pathsToSvg(path)
 # print(len(svgh.pointCoord("svg_entries\svg\simple.svg")[1]))
 
-graph = svgh.cyclesToGraph("svg_entries\svg\square_cycles.svg")
+graph = svgh.cyclesToGraph("svg_entries\svg\simple_reverse.svg")
 # print("XXXXXXXXXXXXXXXXXXXX")
 # print(a)
 # print("")
@@ -19,6 +19,6 @@ graph = svgh.cyclesToGraph("svg_entries\svg\square_cycles.svg")
 # print(c)
 test = sb.nearestCycle(graph, 0)
 
-new_path = sb.stitchEdges(graph)
+new_path = sb.stitchEdges_2(graph)
 print(new_path)
 svgh.pathsToSvg(new_path)
