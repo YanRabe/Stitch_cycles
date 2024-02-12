@@ -143,24 +143,23 @@ def selectCorrectPatchPattern(edge1, edge2):
     else:
         return 'pattern_1'
     
-def changeAdjacence(edge1_id,edge2_id,patch_pattern):
+def changeAdjacence(edge1_id,edge2_id,patch_pattern, liste_d_adjacence):
     '''
     change la liste d'adjacence pour sticher
     '''
-    global liste_d_adjacence
 
-    if patch_pattern == 'pattern2':
-        liste_d_adjacence[edge1_id[0]][0] == edge2_id[1]
-        liste_d_adjacence[edge1_id[1]][1] == edge2_id[0]
+    if patch_pattern == 'pattern_2':
+        liste_d_adjacence[edge1_id[0]][0] = edge2_id[1]
+        liste_d_adjacence[edge1_id[1]][1] = edge2_id[0]
 
-        liste_d_adjacence[edge2_id[0]][0] == edge1_id[1]
-        liste_adjacence[edge2_id[1]][1] == edge1_id[0]
+        liste_d_adjacence[edge2_id[0]][0] = edge1_id[1]
+        liste_d_adjacence[edge2_id[1]][1] = edge1_id[0]
     else:
-        liste_d_adjacence[edge1_id[0]][0] == edge2_id[0]
-        liste_d_adjacence[edge1_id[1]][1] == edge2_id[1]
+        liste_d_adjacence[edge1_id[0]][0] = edge2_id[0]
+        liste_d_adjacence[edge1_id[1]][1] = edge2_id[1]
 
-        liste_d_adjacence[edge2_id[0]][0] == edge1_id[0]
-        liste_d_adjacence[edge2_id[1]][1] == edge1_id[1]
+        liste_d_adjacence[edge2_id[0]][0] = edge1_id[0]
+        liste_d_adjacence[edge2_id[1]][1] = edge1_id[1]
         
     return liste_d_adjacence
 
@@ -176,18 +175,87 @@ def stitchEdges(graph):
     patch_pattern = selectCorrectPatchPattern([liste_de_point[edge1_ids[0]], liste_de_point[edge2_ids[0]]]
                                               ,[liste_de_point[edge1_ids[1]], liste_de_point[edge2_ids[1]]])
 
+
+    liste_d_adjacence = changeAdjacence(edge1_ids, edge2_ids, patch_pattern, liste_d_adjacence)
+    print(liste_d_adjacence)
+    
     if patch_pattern == 'pattern_1':
         id_stitch_point = edge1_ids[1]
     else:
         id_stitch_point = edge1_ids[0]
-    
-    patching_order = [id_first_point]
-    i = 0
-    while patching_order[-1] != edge2_ids[1]:
-        res = liste_d_adjacence[patching_order[i]][0]
-        patching_order.append(res)
-    
-    # INSERT ADJACENT REMAPPING FUNC HERE
-    
-    new_path = svgpt.Path([svgpt.Line(liste_de_point[patching_order[i-1]], liste_de_point[patching_order[i]]) for i in range(len(liste_de_point))])
+
+    # patching_order = [id_first_point]
+    # i = 0
+    # while patching_order[-1] != edge2_ids[1]:
+    #     res = liste_d_adjacence[patching_order[i]][0]
+    #     i += 1
+    #     patching_order.append(res)
+    #     print(f'each {patching_order}')
+    first_stitch_id = liste_d_adjacence[id_first_point][0]
+    lines = [svgpt.Line(liste_de_point[id_first_point], liste_de_point[first_stitch_id])]
+    current_point_id = first_stitch_id
+    next_point_id = liste_d_adjacence[current_point_id][0]
+
+    for i in range(len(liste_de_point)): 
+        lines.append(svgpt.Line(liste_de_point[current_point_id], liste_de_point[next_point_id]))
+        current_point_id = next_point_id
+        next_point_id = liste_d_adjacence[current_point_id][0]
+        
+    print(lines)
+    new_path = svgpt.Path(*lines)
     return new_path
+
+def isPrecedent(point_1, point_2):
+    """
+    La fonction revoie True si le point_1 est le premier du segment
+    point_1 est l'indice d'un point du cycle dans liste_points
+    point_2 est l'indice d'un point du cycle dans liste_points
+    """
+    global liste_d_adjacence
+    return liste_d_adjacence[point_1][0] == point_2
+
+
+def isSuivant(point_1, point_2):
+    """
+    La fonction revoie True si le point_1 est le deuxième du segment
+    point_1 est l'indice d'un point du cycle dans liste_points
+    point_2 est l'indice d'un point du cycle dans liste_points
+    """
+    global liste_d_adjacence
+    return liste_d_adjacence[point_1][1] == point_2
+
+def reverse(point):
+    """
+    Inverse la partie de la liste de points appartenant au cycle de point
+    point : indice du point appartenant au cycle à inverser
+    """
+    global liste_points
+    global liste_adjacence
+    global liste_indice_depart
+
+    indice_cycle_actuel = 0
+    depart, longueur_cycle = liste_indice_depart[indice_cycle_actuel][0], liste_indice_depart[indice_cycle_actuel][1]
+    while point < depart + longueur_cycle - 1:
+        indice_cycle_actuel += 1
+        depart, longueur_cycle = liste_indice_depart[indice_cycle_actuel][0], liste_indice_depart[indice_cycle_actuel][1]
+    
+    liste_cycle = liste_points[depart:depart+longueur_cycle]
+    liste_cycle = liste_points[::-1].copy()
+    liste_points[depart:depart+longueur_cycle] = liste_cycle
+
+
+def selectCorrectPatchPattern_2(edge1, edge2):
+    """
+    vérifie que le sens actuel des 2 formes est correct pour un stitch
+    edge1 est l'indice du point dans la liste de point de graph
+    edge2 est l'indice du point dans la liste de point de graph
+    """
+    if norm2(edge1[0], edge2[0]) < norm2(edge1[0], edge2[1]):
+        if isPrecedent(edge1[0], edge1[1]) == isPrecedent(edge2[0], edge2[1]):
+            reverse(edge2[0])   #trouver comment mettre le cote complet
+        return 'pattern_1'
+    else:
+        if isSuivant(edge1[0], edge1[1]) == isSuivant(edge2[1], edge2[0]):
+            reverse(edge2[0])   #trouver comment mettre le cote complet
+        return 'pattern_2'
+    
