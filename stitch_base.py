@@ -313,14 +313,20 @@ def selectCorrectPatchPattern_2(edge1, edge2):
         return 'pattern_2'
     
 def selectIdCycle(id_Point):
-    
+    '''
+    trouver a quel cycle appartient le point
+    '''
+    global liste_adjacence
     global liste_indice_depart
 
     indice_cycle_actuel = 0
-    depart, longueur_cycle = liste_indice_depart[indice_cycle_actuel][0], liste_indice_depart[indice_cycle_actuel][1]
-    while id_Point >= depart + longueur_cycle:
+    for cycle in liste_indice_depart:
+        point_actuel = cycle[0]
+        for i in range(cycle[1]):
+            if liste_adjacence[point_actuel][0] == id_Point:
+                return indice_cycle_actuel
+            point_actuel = liste_adjacence[point_actuel][0]
         indice_cycle_actuel += 1
-        depart, longueur_cycle = liste_indice_depart[indice_cycle_actuel][0], liste_indice_depart[indice_cycle_actuel][1]
     return indice_cycle_actuel
 
 
@@ -334,8 +340,16 @@ def stitchEdges_2(graph):
     global liste_adjacence
     global liste_indice_depart
     liste_points, liste_adjacence, liste_indice_depart = graph
+    
+    '''trouver le premier cycle a stitch'''
+    min_cycle = liste_indice_depart[0]
+    for cycle in liste_indice_depart:
+        if cycle[1] <= min_cycle[1]:
+            min_cycle = cycle
+    id_cycle_depart = liste_indice_depart.index(min_cycle)
+            
 
-    edge1_ids, edge2_ids = nearestCycle(graph, 0)[1:]
+    edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)[1:]
     id_first_point = edge2_ids[0]
     patch_pattern = selectCorrectPatchPattern_2(edge1_ids, edge2_ids)
 
@@ -357,6 +371,7 @@ def stitchEdges_2(graph):
         # print(lines[-1])
         
     # print(lines)
+    
     new_path = svgpt.Path(*lines)
     return new_path
 
