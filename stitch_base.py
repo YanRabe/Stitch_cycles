@@ -302,12 +302,10 @@ def selectCorrectPatchPattern_2(edge1, edge2):
     """
 
     if norm2(liste_points[edge1[0]], liste_points[edge2[0]]) < norm2(liste_points[edge1[0]], liste_points[edge2[1]]):
-        # print("a")
         if isPrecedent(edge1[0], edge1[1]) == isPrecedent(edge2[0], edge2[1]):
             reverse_2(edge2[0])
         return 'pattern_1'
     else:
-        # print("b")
         if isPrecedent(edge1[0], edge1[1]) == isPrecedent(edge2[1], edge2[0]):
             reverse_2(edge2[0])
         return 'pattern_2'
@@ -396,7 +394,7 @@ def changeAdjacence_2(edge1_id,edge2_id,patch_pattern, liste_d_adjacence):
     print()
     """
 
-    if patch_pattern == 'pattern_2':    #Comment on sait le sens des 2 formes ?
+    if patch_pattern == 'pattern_2':
         if isPrecedent(edge1_id[0], edge1_id[1]):
             liste_adjacence[edge1_id[0]][0], liste_adjacence[edge2_id[1]][1] = edge2_id[1], edge1_id[0]
 
@@ -430,3 +428,16 @@ def changeAdjacence_2(edge1_id,edge2_id,patch_pattern, liste_d_adjacence):
     """
         
     return liste_d_adjacence
+
+def merge_Cycles(id_Cycle_A,id_Cycle_B):
+    """
+    Fusionne 2 cycles dans la liste de cycles
+    id_cycle_A/B sont les indices des cycles dans liste_indice_depart
+    """
+    # On peut changer la fonction pour prendre les edges et chercher les cycles dans la fonction
+
+    global  liste_indice_depart
+
+    longueur_cycle_B = liste_indice_depart[id_Cycle_B][1]
+    liste_indice_depart[id_Cycle_A][1] += longueur_cycle_B
+    del(liste_indice_depart[id_Cycle_B])
