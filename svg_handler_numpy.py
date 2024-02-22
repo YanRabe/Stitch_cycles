@@ -15,20 +15,16 @@ def pointCoord(svgpath):
      Un chemin est composé de lignes partant d'un point de départ jusqu'à un point d'arrivée
      Puis récupère les coordonnées individuelles du chemin
      
-     Renvoie une array de dimmension N,2 contenant les coordonnees complexes de chaque point d'un cycle
+     Renvoie une array de dimmension N,2 contenant les coordonnees complexes de chaque point
      avec la partie réelle dans la colonne 0 et la partie imaginaire dans la colonne 1.
       '''
     paths = svg2paths(svgpath)[0]
     array_de_points = np.empty((0,2))
 
     for path_discontinuous in paths:
-
-        #print(f"path discontinuous: {path_discontinuous}")
-        #print(f"continuous subpath: {path_discontinuous.continuous_subpaths()}")
         
         for path in path_discontinuous.continuous_subpaths():
 
-            #print(f'path: {path}')
             cycle_de_point = np.array([path[0][0].real,path[0][0].imag])
             for point in path:
                 point_np = np.array([point[1].real,point[1].imag])
