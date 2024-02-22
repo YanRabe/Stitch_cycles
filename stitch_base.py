@@ -206,14 +206,15 @@ def stitchEdges(graph):
         id_stitch_point = edge1_ids[1]
     else:
         id_stitch_point = edge1_ids[0]
-
-    # patching_order = [id_first_point]
-    # i = 0
-    # while patching_order[-1] != edge2_ids[1]:
-    #     res = liste_d_adjacence[patching_order[i]][0]
-    #     i += 1
-    #     patching_order.append(res)
-    #     print(f'each {patching_order}')
+    """
+    patching_order = [id_first_point]
+    i = 0
+    while patching_order[-1] != edge2_ids[1]:
+        res = liste_d_adjacence[patching_order[i]][0]
+        i += 1
+        patching_order.append(res)
+        print(f'each {patching_order}')
+    """
     first_stitch_id = liste_d_adjacence[id_first_point][0]
     lines = [svgpt.Line(liste_de_point[id_first_point], liste_de_point[first_stitch_id])]
     current_point_id = first_stitch_id
@@ -296,6 +297,7 @@ def selectCorrectPatchPattern_2(edge1, edge2):
     """
     global liste_points
     global liste_adjacence
+    global liste_indice_depart
     """
     print(f"edge1 : point 1 {edge1[0]} / {liste_adjacence[edge1[0]]}, point 2 {edge1[1]} / {liste_adjacence[edge1[1]]}")
     print(f"edge2 : point 1 {edge2[0]} / {liste_adjacence[edge2[0]]}, point 2 {edge2[1]} /{liste_adjacence[edge2[1]]}")
@@ -303,11 +305,17 @@ def selectCorrectPatchPattern_2(edge1, edge2):
 
     if norm2(liste_points[edge1[0]], liste_points[edge2[0]]) < norm2(liste_points[edge1[0]], liste_points[edge2[1]]):
         if isPrecedent(edge1[0], edge1[1]) == isPrecedent(edge2[0], edge2[1]):
-            reverse_2(edge2[0])
+            if liste_indice_depart[selectIdCycle(edge2[0])][1] < liste_indice_depart[selectIdCycle(edge2[0])][1]:
+                reverse_2(edge2[0])
+            else:
+                reverse_2(edge1[0])
         return 'pattern_1'
     else:
         if isPrecedent(edge1[0], edge1[1]) == isPrecedent(edge2[1], edge2[0]):
-            reverse_2(edge2[0])
+            if liste_indice_depart[selectIdCycle(edge2[0])][1] < liste_indice_depart[selectIdCycle(edge2[0])][1]:
+                reverse_2(edge2[0])
+            else:
+                reverse_2(edge1[0])
         return 'pattern_2'
     
 def selectIdCycle(id_Point):
@@ -346,15 +354,23 @@ def stitchEdges_2(graph):
             min_cycle = cycle
     id_cycle_depart = liste_indice_depart.index(min_cycle)
             
+    print(liste_indice_depart, len(liste_points))
+    test = len(liste_indice_depart)
+    while len(liste_indice_depart) > 1:
+        edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)[1:]
+        
+        cycle_A_id, cycle_B_id = selectIdCycle(edge2_ids[0]), selectIdCycle(edge1_ids[0])
+        
+        id_first_point = edge2_ids[0]
+        patch_pattern = selectCorrectPatchPattern_2(edge1_ids, edge2_ids)
 
-    edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)[1:]
-    id_first_point = edge2_ids[0]
-    patch_pattern = selectCorrectPatchPattern_2(edge1_ids, edge2_ids)
+        # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
+        liste_adjacence = changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, liste_adjacence)
+        merge_Cycles(cycle_B_id, cycle_A_id)
+    # le while finit ici 
+    # print(liste_indice_depart)
 
-    # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
-    liste_adjacence = changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, liste_adjacence)
-    # print(liste_d_adjacence)
-    
+
     first_stitch_id = liste_adjacence[id_first_point][0]
     # print(id_first_point, liste_adjacence, first_stitch_id)
     lines = [svgpt.Line(liste_points[id_first_point], liste_points[first_stitch_id])]
@@ -362,7 +378,7 @@ def stitchEdges_2(graph):
     next_point_id = liste_adjacence[current_point_id][0]
     # print(lines[-1])
 
-    for i in range(liste_indice_depart[selectIdCycle(edge1_ids[0])][1] + liste_indice_depart[selectIdCycle(edge2_ids[0])][1]):
+    for i in range(len(liste_points)):
         lines.append(svgpt.Line(liste_points[current_point_id], liste_points[next_point_id]))
         current_point_id = next_point_id
         next_point_id = liste_adjacence[current_point_id][0]
@@ -434,7 +450,6 @@ def merge_Cycles(id_Cycle_A,id_Cycle_B):
     Fusionne 2 cycles dans la liste de cycles
     id_cycle_A/B sont les indices des cycles dans liste_indice_depart
     """
-    # On peut changer la fonction pour prendre les edges et chercher les cycles dans la fonction
 
     global  liste_indice_depart
 

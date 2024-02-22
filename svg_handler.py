@@ -75,7 +75,7 @@ def cyclesToGraph(paths):
     return liste_de_point,liste_d_adjacence,liste_indice_depart
                 
 
-def pathsToSvg(points):
+def pathsToSvg(points, filename):
     """Prend des coordonnées complexes.
 
     les transforme en path
@@ -87,4 +87,4 @@ def pathsToSvg(points):
     lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
     print(*lines_list)
     paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}.svg')
+    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}_{filename}.svg')
