@@ -353,9 +353,15 @@ def stitchEdges_2(graph):
         if cycle[1] <= min_cycle[1]:
             min_cycle = cycle
     id_cycle_depart = liste_indice_depart.index(min_cycle)
-            
+    """
     print(liste_indice_depart, len(liste_points))
     test = len(liste_indice_depart)
+    print(liste_points[82], liste_points[83], liste_points[100], liste_points[101])
+    print(norm2(liste_points[82], liste_points[83]), norm2(liste_points[100], liste_points[101]))
+    print(norm2(liste_points[82], liste_points[100]), norm2(liste_points[83], liste_points[101]))
+    print(norm2(liste_points[82], liste_points[101]), norm2(liste_points[83], liste_points[100]))
+    """        
+
     while len(liste_indice_depart) > 1:
         edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)[1:]
         
@@ -456,3 +462,117 @@ def merge_Cycles(id_Cycle_A,id_Cycle_B):
     longueur_cycle_B = liste_indice_depart[id_Cycle_B][1]
     liste_indice_depart[id_Cycle_A][1] += longueur_cycle_B
     del(liste_indice_depart[id_Cycle_B])
+
+
+# méthode d'équation de droites + comment faire pour droite verticale ?
+    
+def equation_droite(edge):
+    """
+    Calcule l'équation de droite du segment donné en argument
+    Equation de la forme : y = ax + b
+    si droite verticale alors equation : x = c
+    renvoie a,b,c avec inf sur les valeurs non utilisées
+    """
+    x1, x2 = edge[0].real, edge[1].real
+    y1, y2 = edge[0].imag, edge[1].imag
+    if x1 == x2:
+        a, b, c = inf, inf, x1
+    else:
+        a = (y1 - y2) / (x1 - x2)
+        b = y1 - a * x1
+        c = inf
+    return a, b, c
+
+
+
+def intersection_segments(edge1, edge2):
+    """
+    Prends 2 segments, calcule leur équation paramétrique de segment
+    puis vérifie que le point d'intersection des droites n'est pas sur les segments
+    """
+    a1, _, _ = equation_droite(edge1)
+    a2, _, _ = equation_droite(edge2)
+    if a1 == a2:
+        """
+        vérifie si les droites sont parallèles
+        """
+        return False
+    x1, x2 = edge1[0].real, edge1[1].real
+    y1, y2 = edge1[0].imag, edge1[1].imag
+    x3, x4 = edge2[0].real, edge2[1].real
+    y3, y4 = edge2[0].imag, edge2[1].imag
+    """
+    2 équations:
+    m * x - n * y = k1
+    p * x - q * y = k2
+    """
+    m, n = x2 - x1, x4 - x3
+    p, q = y2 - y1, y4 - y3
+    k1, k2 = x3 - x1, y3 - y1
+
+    x = (k1 * (-q) - (-n) * k2) / (m * (-q) - (-n) * p)
+    y = (m * k2 - k1 * p) / (m * (-q) - (-n) * p)
+    
+    if 0 <= x <= 1 and 0 <= y <= 1:
+        return True
+    return False
+
+
+def intersection_droites(edge1, edge2):
+    """
+    Preds 2 segments en argument et vérifie que l'intersection des droites associées
+    n'est pas inclus dans les segments
+    """
+    a1, b1, c1 = equation_droite(edge1)
+    a2, b2, c2 = equation_droite(edge2)
+    x1, x2 = edge1[0].real, edge1[1].real
+    y1, y2 = edge1[0].imag, edge1[1].imag
+    x3, x4 = edge2[0].real, edge2[1].real
+    y3, y4 = edge2[0].imag, edge2[1].imag
+
+    if x2 < x1 :
+        x1, x2 = x2, x1
+    if x4 < x3 :
+        x3, x4 = x4, x3
+    if y2 < y1 :
+        y1, y2 = y2, y1
+    if y4 < y3 :
+        y3, y4 = y4, y3
+
+    if a1 == a2:
+        print("a")
+        """
+        vérifie si les droites sont parallèles
+        """
+        return False
+    elif c1 == inf and c2 != inf:
+        print("b")
+        """
+        il existe (x,y) vérifiant les 2 équations:
+        y = a1 * x + b1
+        x = c2
+        """
+        x = c2
+        y = a1 * x + b1
+    elif c1 != inf and c2 == inf:
+        print("c")
+        """
+        il existe (x,y) vérifiant les 2 équations:
+        x = c1
+        y = a2 * x + b2
+        """
+        x = c1
+        y = a2 * x + b2
+    else:
+        print("d")
+        """
+        il existe (x,y) vérifiant les 2 équations:
+        y = a1 * x + b1
+        y = a2 * x + b2
+        """
+        x = (b2 - b1)/(a1 - a2)
+        y = a1 * x + b1
+
+    if x1 <= x <= x2 and x3 <= x <= x4 and y1 <= y <= y2 and y3 <= y <= y4:
+        return True
+    return False
