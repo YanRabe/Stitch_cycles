@@ -1,3 +1,4 @@
+import svg_handler_numpy as svgh_np
 import svg_handler as svgh
 import stitch_base as sb
 from svgpathtools import Path, Line
@@ -6,16 +7,22 @@ from svgpathtools import Path, Line
 #print(path)
 #svgh.pathsToSvg(path)
 path = svgh.pointCoord("svg_entries\svg\simple.svg")
-# print(path)
+print(path)
 # svgh.pathsToSvg(path)
 # print(len(svgh.pointCoord("svg_entries\svg\simple.svg")[1]))
 
-graph = svgh.cyclesToGraph("svg_entries\svg\simple.svg")
+graph = svgh.cyclesToGraph(r"svg_entries\svg\brain_cycles.svg")
+print("XXXXXXXXXXXx")
+graph = svgh_np.pointCoordList("svg_entries\svg\simple.svg")
+print(graph)
 # print("XXXXXXXXXXXXXXXXXXXX")
 # print(a)
 # print("")
 # print(b)
 # print("")
 # print(c)
-# test = sb.nearestCycle(graph, 0)
-# print(test)
+test = sb.nearestCycle(graph, 0)
+
+new_path = sb.stitchEdges_2(graph)
+print(new_path)
+svgh.pathsToSvg(new_path)
