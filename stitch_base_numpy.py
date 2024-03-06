@@ -26,3 +26,4 @@ def np_energyid_cycle_Alc(edge1, edge2):
 
     return res
 
+
