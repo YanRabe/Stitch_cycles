@@ -2,6 +2,7 @@ from math import inf
 import svg_handler as svgh
 import numpy as np
 import svgpathtools as svgpt
+
 """
 Cycles --> liste: 
     -coord points 
@@ -30,7 +31,7 @@ def norm2(point_a, point_b):
     Renvoie la distance avec la norme euclidienne.
     """
     difference = (point_a.real - point_b.real, point_a.imag - point_b.imag) #différence des points a et b
-    res = np.sqrt(difference[0]**2+difference[1]**2) #distance entre a et b (norme 2)
+    res = (difference[0]**2+difference[1]**2)**0.5 #distance entre a et b (norme 2)
     return res
     
 def listCoord(graph,id_cycle_A):
@@ -38,6 +39,7 @@ def listCoord(graph,id_cycle_A):
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     id_cycle_A est l'indice du cycle;
     """
+    # print(id_cycle_A, liste_indice_depart)
     liste_points, liste_adjacence, liste_indice_depart = graph
     res = []
     act = liste_indice_depart[id_cycle_A][0]
@@ -53,40 +55,51 @@ def nearestCycle(graph, id_cycle_A):
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     id_cycle_A est l'indice du cycle dont on cherche le voisin le + proche;
     """
-    liste_de_point, liste_d_adjacence, liste_indice_depart = graph
-    liste_dist = []
+    liste_de_point, _, liste_indice_depart = graph
+    liste_energy = []
     liste_edges = []
+    """
+    print(len(liste_indice_depart), id_cycle_A)
+
+    if len(liste_indice_depart) < id_cycle_A:
+        print(liste_indice_depart)
+    """
+
     cycle_A = listCoord(graph, id_cycle_A)
+    min_energy_cycle = inf
+    edge_A, edge_B = None, None
 
     for id_cycle_B in range(len(liste_indice_depart)):
 
-        min_energy_cycle = inf
 
         if id_cycle_B != id_cycle_A:
 
             cycle_B = listCoord(graph, id_cycle_B)
-            edge_A, edge_B = None, None
             
-            for coord in range(len(cycle_B)):
+            temp = nearestEdge3(cycle_A, cycle_B)
 
-                temp = nearestEdge2(cycle_B,[cycle_B[coord-1],cycle_B[coord]],cycle_A)
+            if temp[2] < min_energy_cycle:
 
-                if temp[2] < min_energy_cycle:
+                min_energy_cycle = temp[2]
+                edge_A = [liste_de_point.index(temp[0][0]), liste_de_point.index(temp[0][1])]
+                edge_B = [liste_de_point.index(temp[1][0]), liste_de_point.index(temp[1][1])]
 
-                    edge_A, edge_B, min_energy_cycle = temp
-
-            liste_dist.append(min_energy_cycle)
+            """
+            liste_energy.append(min_energy_cycle)
             indice_A1, indice_A2 = liste_de_point.index(edge_A[0]), liste_de_point.index(edge_A[1])
             indice_B1, indice_B2 = liste_de_point.index(edge_B[0]), liste_de_point.index(edge_B[1])
             liste_edges.append([[indice_A1,indice_A2],[indice_B1,indice_B2]])
 
         else:
 
-            liste_dist.append(min_energy_cycle)
+            liste_energy.append(min_energy_cycle)
             liste_edges.append([None,None])
-
-    minId = liste_dist.index(min(liste_dist))
-    return liste_dist[minId], *liste_edges[minId]
+            """
+    """
+    minId = liste_energy.index(min(liste_energy))
+    return liste_energy[minId], *liste_edges[minId]
+    """
+    return min_energy_cycle, edge_A, edge_B
 
 def nearestEdge2(id_cycle_A, edge_A, id_cycle_B, expected = None):
     """
@@ -108,8 +121,23 @@ def nearestEdge2(id_cycle_A, edge_A, id_cycle_B, expected = None):
         return edge_A, choix_B, min_energy
     return nearestEdge2(id_cycle_B, choix_B, id_cycle_A, edge_A)
 
+def nearestEdge3(cycle_A, cycle_B):
+    """
+    renvoie les deux edges les + proches entre cycle A et cycle B
+    """
+    
+    edge_A, edge_B = [cycle_A[-1], cycle_A[0]], [cycle_B[-1], cycle_B[0]]
+    min_energy = energyid_cycle_Alc(edge_A, edge_B)
 
-   
+    for id_point_A in range(len(cycle_A)-1):
+        for id_point_B in range((len(cycle_B))-1):
+            temp = energyid_cycle_Alc([cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]])
+            if temp < min_energy:
+                min_energy = temp
+                edge_A, edge_B = [cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]]
+
+    return edge_A, edge_B, min_energy
+
 
 def isPrecedent(point_1, point_2):
     """
@@ -210,6 +238,7 @@ def stitchEdges_2(graph):
     global liste_points
     global liste_adjacence
     global liste_indice_depart
+    
     liste_points, liste_adjacence, liste_indice_depart = graph
     
     '''trouver le premier cycle a stitch'''
@@ -230,15 +259,18 @@ def stitchEdges_2(graph):
     while len(liste_indice_depart) > 1:
         edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)[1:]
         
-        cycle_A_id, cycle_B_id = selectIdCycle(edge2_ids[0]), selectIdCycle(edge1_ids[0])
+        cycle_A_id, cycle_B_id = selectIdCycle(edge1_ids[0]), selectIdCycle(edge2_ids[0])
         
         id_first_point = edge2_ids[0]
         patch_pattern = selectCorrectPatchPattern_3(edge1_ids, edge2_ids)
 
         # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
         liste_adjacence = changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, liste_adjacence)
-        merge_Cycles(cycle_B_id, cycle_A_id)
-    # le while finit ici 
+        
+        cycle_B_id = merge_Cycles(cycle_B_id, cycle_A_id)
+        id_cycle_depart = cycle_B_id
+        # ou on pred l'indice du cycle avec le - de points (+ complexe)
+
     # print(liste_indice_depart)
 
 
@@ -324,9 +356,11 @@ def merge_Cycles(id_Cycle_A,id_Cycle_B):
 
     global  liste_indice_depart
 
+    depart_cycle_A = liste_indice_depart[id_Cycle_A][0]
     longueur_cycle_B = liste_indice_depart[id_Cycle_B][1]
     liste_indice_depart[id_Cycle_A][1] += longueur_cycle_B
     del(liste_indice_depart[id_Cycle_B])
+    return selectIdCycle(depart_cycle_A)
 
 
 # méthode d'équation de droites + comment faire pour droite verticale ?
@@ -625,3 +659,44 @@ def selectCorrectPatchPattern_2(edge1, edge2):
             else:
                 reverse_2(edge1[0])
         return 'pattern_2'
+    
+def nearestCycle_old(graph, id_cycle_A):
+    
+    """
+    graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
+    id_cycle_A est l'indice du cycle dont on cherche le voisin le + proche;
+    """
+    liste_de_point, liste_d_adjacence, liste_indice_depart = graph
+    liste_dist = []
+    liste_edges = []
+    cycle_A = listCoord(graph, id_cycle_A)
+
+    for id_cycle_B in range(len(liste_indice_depart)):
+
+        min_energy_cycle = inf
+
+        if id_cycle_B != id_cycle_A:
+
+            cycle_B = listCoord(graph, id_cycle_B)
+            edge_A, edge_B = None, None
+            
+            for coord in range(len(cycle_B)):
+
+                temp = nearestEdge2(cycle_B,[cycle_B[coord-1],cycle_B[coord]],cycle_A)
+
+                if temp[2] < min_energy_cycle:
+
+                    edge_A, edge_B, min_energy_cycle = temp
+
+            liste_dist.append(min_energy_cycle)
+            indice_A1, indice_A2 = liste_de_point.index(edge_A[0]), liste_de_point.index(edge_A[1])
+            indice_B1, indice_B2 = liste_de_point.index(edge_B[0]), liste_de_point.index(edge_B[1])
+            liste_edges.append([[indice_A1,indice_A2],[indice_B1,indice_B2]])
+
+        else:
+
+            liste_dist.append(min_energy_cycle)
+            liste_edges.append([None,None])
+
+    minId = liste_dist.index(min(liste_dist))
+    return liste_dist[minId], *liste_edges[minId]
