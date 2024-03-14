@@ -15,7 +15,7 @@ def pointCoord(svgpath):
      Un chemin est composé de lignes partant d'un point de départ jusqu'à un point d'arrivée
      Puis récupère les coordonnées individuelles du chemin
      
-     Renvoie une array de dimmension N,2 contenant les coordonnees complexes de chaque point
+     Renvoie une ndarray de dimmension N,2 contenant les coordonnees complexes de chaque point
      avec la partie réelle dans la colonne 0 et la partie imaginaire dans la colonne 1.
       '''
     paths = svg2paths(svgpath)[0]
@@ -99,16 +99,15 @@ def cyclesToGraph(paths):
     return array_de_point,array_d_adjacence,array_indice_depart
                 
 
-def pathsToSvg(points):
+def pathsToSvg(points, filename):
     """Prend des coordonnées complexes.
 
     les transforme en path
 
     Renvoie un fichier svg.
-    
     """
     global number_outputs
     lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
     print(*lines_list)
     paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}.svg')
+    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}_{filename}.svg')
