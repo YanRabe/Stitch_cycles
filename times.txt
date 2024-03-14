@@ -1,0 +1,10 @@
+simple : 0 h, 0 min, 0.00798940658569336 s 
+simple_reverse : 0 h, 0 min, 0.007994413375854492 s 
+brain_cycles : 0 h, 1.0 min, 15.935579776763916 s 
+
+
+simple : 0 h, 0 min, 0.00800633430480957 s 
+simple_reverse : 0 h, 0 min, 0.0079498291015625 s 
+brain_cycles : 0 h, 0 min, 48.098801136016846 s 
+
+
