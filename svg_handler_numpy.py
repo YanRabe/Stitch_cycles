@@ -20,7 +20,7 @@ def pointCoord(svgpath):
       '''
     paths = svg2paths(svgpath)[0]
     array_de_point = np.empty((0,2))
-
+    print(array_de_point)
     for path_discontinuous in paths:
         
         for path in path_discontinuous.continuous_subpaths():
@@ -107,7 +107,8 @@ def pathsToSvg(points, filename):
     Renvoie un fichier svg.
     """
     global number_outputs
-    lines_list = [[Line(points[i][j-1], points[i][j]) for j in range(len(points[i]))] for i in range(len(points))]
-    print(*lines_list)
-    paths = [Path(*lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename=f'outputs\output{number_outputs + 1}_{filename}.svg')
+    print(points[0][0])
+    lines_list = [Line(complex(*points[i][j-1]), complex(*points[i][j])) for i in range(len(points)) for j in range(len(points[i]))]
+    print(*lines_list, sep='\n \n')
+    paths = [Path(lines_list[i]) for i in range(len(lines_list))]
+    paths2svg.wsvg(paths, filename=f'outputs\ numpy_output{number_outputs + 1}_{filename}.svg')
