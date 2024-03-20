@@ -73,7 +73,7 @@ def nearestCycle(graph, id_cycle_A):
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     id_cycle_A est l'indice du cycle dont on cherche le voisin le + proche;
     """
-    liste_de_point, _, liste_indice_depart = graph
+    liste_de_point, y, liste_indice_depart = graph
     liste_energy = []
     liste_edges = []
     """

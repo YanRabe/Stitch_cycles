@@ -70,8 +70,8 @@ def cyclesToGraph(paths):
     -une array de dimension M,2 (avec M le nombre de cycle), avec l'indice du point de depart et le nombre de points du cycle
     """
     array_de_point_initiale = pointCoordList(paths)
-    array_d_adjacence = np.empty((0,2))
-    array_indice_depart = np.empty((0,2)) #continent une array par cycle avec l'indice de depart et le nombre de points du cycle
+    array_d_adjacence = np.empty((0,2),dtype=int)
+    array_indice_depart = np.empty((0,2),dtype=int) #continent une array par cycle avec l'indice de depart et le nombre de points du cycle
     array_de_point = np.empty((0,2))#contient l'ensemble des points dans une seule array
     
     for indice_cycle in range(len(array_de_point_initiale)):
