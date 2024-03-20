@@ -8,3 +8,14 @@ simple_reverse : 0 h, 0 min, 0.0079498291015625 s
 brain_cycles : 0 h, 0 min, 48.098801136016846 s 
 
 
+simple : 0 h, 0 min, 0.11050057411193848 s 
+simple_reverse : 0 h, 0 min, 0.07621526718139648 s 
+brain_cycles : 0 h, 1.0 min, 49.64260172843933 s 
+
+
+simple : 0 h, 0 min, 0.046855926513671875 s 
+
+
+brain_cycles : 0 h, 1.0 min, 30.849547147750854 s 
+
+
