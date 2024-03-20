@@ -9,7 +9,7 @@ Cycles --> liste:
     -ind points suiv - préc
     -ind point de départ + nb de points par cycle
 """
-def energyid_cycle_Alc(edge1, edge2):
+def energyid_cycle_Calc(edge1, edge2):
     """
     Prend en entrée deux lignes (type liste) 
 
@@ -110,9 +110,9 @@ def nearestEdge2(id_cycle_A, edge_A, id_cycle_B, expected = None):
     """
     
     choix_B = [id_cycle_B[-1],id_cycle_B[0]]
-    min_energy = energyid_cycle_Alc(edge_A,choix_B)
+    min_energy = energyid_cycle_Calc(edge_A,choix_B)
     for sommet in range(len(id_cycle_B)-1):
-        temp = energyid_cycle_Alc(edge_A,[id_cycle_B[sommet],id_cycle_B[sommet+1]])
+        temp = energyid_cycle_Calc(edge_A,[id_cycle_B[sommet],id_cycle_B[sommet+1]])
         if temp < min_energy:
             min_energy = temp
             choix_B = [id_cycle_B[sommet],id_cycle_B[sommet+1]]
@@ -127,11 +127,11 @@ def nearestEdge3(cycle_A, cycle_B):
     """
     
     edge_A, edge_B = [cycle_A[-1], cycle_A[0]], [cycle_B[-1], cycle_B[0]]
-    min_energy = energyid_cycle_Alc(edge_A, edge_B)
+    min_energy = energyid_cycle_Calc(edge_A, edge_B)
 
     for id_point_A in range(len(cycle_A)-1):
         for id_point_B in range((len(cycle_B))-1):
-            temp = energyid_cycle_Alc([cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]])
+            temp = energyid_cycle_Calc([cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]])
             if temp < min_energy:
                 min_energy = temp
                 edge_A, edge_B = [cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]]
@@ -420,7 +420,7 @@ def intersection_segments(edge1, edge2):
 
 def intersection_droites(edge1, edge2):
     """
-    Preds 2 segments en argument et vérifie que l'intersection des droites associées
+    Prend 2 segments en argument et vérifie que l'intersection des droites associées
     n'est pas inclus dans les segments
     """
     a1, b1, c1 = equation_droite(edge1)
