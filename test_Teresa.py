@@ -25,10 +25,10 @@ act = array_indice_depart[0,0]
 prueba = array_de_point[act]
 inter = np.vstack((res,prueba))
 
-# #print(sb_np.np_nearestEdge3(cycle_A_np, cycle_B_np))
-# print(sb.nearestCycle(graph1,0))
-#
-# print(sb_np.np_nearestCycle(graph1_np,0))
+#print(sb_np.np_nearestEdge3(cycle_A_np, cycle_B_np))
+print(sb.nearestCycle(graph1,0))
+
+print(sb_np.np_nearestCycle(graph1_np,0))
 
 ##
 import numpy as np
