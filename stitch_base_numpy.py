@@ -28,4 +28,18 @@ def np_energyid_cycle_Alc(edge1, edge2):
 
     return res
 
+def listCoord(graph,id_cycle_A):
+    """
+    graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
+    id_cycle_A est l'indice du cycle;
 
+    renvoie un un tableau de dim N,2 avec contenant les points d'un seul cycle dont l'indice est passe en argument
+    """
+    liste_points, liste_adjacence, liste_indice_depart = graph
+    res = np.empty((0,2))
+    act = liste_indice_depart[id_cycle_A][0]
+
+    for i in range(liste_indice_depart[id_cycle_A][1]):
+        res = np.vstack((res,liste_points[act]))
+        act = liste_adjacence[act][0]
+    return res
