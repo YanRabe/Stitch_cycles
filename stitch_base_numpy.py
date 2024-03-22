@@ -28,6 +28,25 @@ def np_energyid_cycle_Alc(edge1, edge2):
 
     return res
 
+def vectorial_energy(edge:np.array,E:np.array):
+    '''
+    E:ensemble d'edges dans le fichier (n,2,2)
+    avec n le nombre d'edges dans le fichier
+    edge: l'edge qu'on veut stitcher (2,2)
+    '''
+    norm_edge = norm2(edge[0],edge[1])
+    N = np.empty((E.shape[0],1))
+    norm_1_2 = np.empty((E.shape[0],1))
+    norm_1_1 = np.empty((E.shape[0],1))
+
+    for i in range(E.shape[0]):
+        N[i] = norm2(E[i,0],E[i,1])
+        norm_1_2[i] = norm2(edge[0],E[i,1]) + norm2(edge[1],E[i,0])
+        norm_1_1[i] = norm2(edge[0],E[i,0]) + norm2(edge[1],E[i,1])
+
+    #print(np.minimum(norm_1_2,norm_1_1))
+    return np.minimum(norm_1_2,norm_1_1) - norm_edge - N
+
 def np_listCoord(graph,id_cycle_A):
     """
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
@@ -118,3 +137,75 @@ def isPrecedent(point_1, point_2):
     """
     global array_d_adjacence
     return array_d_adjacence[point_1][0] == point_2
+
+def stitchEdges_2(graph):
+    '''
+    Récupère la liste de coordonnées des deux cycles, ainsi que les deux edges à stitch.
+
+    Recrée un objet de type path avec la liaison effectuée.
+    '''
+    global liste_points
+    global liste_adjacence
+    global liste_indice_depart
+
+    array_de_point, array_d_adjacence, array_indice_depart = graph
+
+    '''trouver le premier cycle a stitch'''
+    #necessaire??
+
+    # min_cycle = array_indice_depart[0]
+    # for cycle in array_indice_depart:
+    #     if cycle[1] <= min_cycle[1]:
+    #         min_cycle = cycle
+    # id_cycle_depart = liste_indice_depart.index(min_cycle)
+    """
+    print(liste_indice_depart, len(liste_points))
+    test = len(liste_indice_depart)
+    print(liste_points[82], liste_points[83], liste_points[100], liste_points[101])
+    print(norm2(liste_points[82], liste_points[83]), norm2(liste_points[100], liste_points[101]))
+    print(norm2(liste_points[82], liste_points[100]), norm2(liste_points[83], liste_points[101]))
+    print(norm2(liste_points[82], liste_points[101]), norm2(liste_points[83], liste_points[100]))
+    """
+    for i in tqdm(range(array_indice_depart.shape[0]-1)):
+    #while len(liste_indice_depart) > 1:
+        reversed, edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)
+
+        cycle_A_id, cycle_B_id = selectIdCycle(edge1_ids[0]), selectIdCycle(edge2_ids[0])
+
+        id_first_point = edge2_ids[0]
+
+        if reversed:
+            reverse_2(edge1_ids[0])
+            patch_pattern = 'pattern_1'
+        else:
+            patch_pattern = 'pattern_2'
+        #patch_pattern = selectCorrectPatchPattern_3(edge1_ids, edge2_ids)
+
+        # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
+        liste_adjacence = changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, liste_adjacence)
+
+        cycle_B_id = merge_Cycles(cycle_B_id, cycle_A_id)
+        id_cycle_depart = cycle_B_id
+        # ou on pred l'indice du cycle avec le - de points (+ complexe)
+
+    # print(liste_indice_depart)
+
+
+    first_stitch_id = liste_adjacence[id_first_point][0]
+    # print(id_first_point, liste_adjacence, first_stitch_id)
+    lines = [0.] *(len(liste_points))
+    lines[0] = svgpt.Line(liste_points[id_first_point], liste_points[first_stitch_id])
+    current_point_id = first_stitch_id
+    next_point_id = liste_adjacence[current_point_id][0]
+    # print(lines[-1])
+
+    for i in range(len(liste_points)):
+        lines[i] = svgpt.Line(liste_points[current_point_id], liste_points[next_point_id])
+        current_point_id = next_point_id
+        next_point_id = liste_adjacence[current_point_id][0]
+        # print(lines[-1])
+
+    print(lines)
+
+    new_path = svgpt.Path(*lines)
+    return new_path
