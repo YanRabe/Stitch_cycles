@@ -29,16 +29,30 @@ def energyid_cycle_Calc_2(edge1, edge2):
 
     et renvoie l'énergie de 'patch' selon la formule pg 8.
     """
-    val1, val2 = norm2(edge1[0], edge2[1])+ norm2(edge1[1], edge2[0]), norm2(edge1[0], edge2[0]) + norm2(edge1[1], edge2[1])
+
+    global liste_points
+
+    val1 = norm2(liste_points[edge1[0]], liste_points[edge2[1]]) + norm2(liste_points[edge1[1]], liste_points[edge2[0]])
+    val2 = norm2(liste_points[edge1[0]], liste_points[edge2[0]]) + norm2(liste_points[edge1[1]], liste_points[edge2[1]])
+
     if val1 < val2:
-        res = val1 - (norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1]))
-        reverse = False
+        res = val1# - norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1])
         link = [[0,1], [1,0]]
+        link = 'pattern_2'
+        if not intersection_segments([edge1[0], edge2[1]], [edge1[1], edge2[0]]):
+            reverse = False
+        else:
+            reverse = True
     else:
-        res = val2 - (norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1]))
-        reverse = True
+        res = val2# - norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1])
         link = [[0,0], [1,1]]
-    return res, reverse
+        link = 'pattern_1'
+        if not intersection_segments([edge1[0], edge2[0]], [edge1[1], edge2[1]]):
+            reverse = True
+        else:
+            print('d')
+            reverse = False
+    return res, reverse, link
 
 def norm2(point_a, point_b):
     """
@@ -62,7 +76,7 @@ def listCoord(graph,id_cycle_A):
     res = [0.] * liste_indice_depart[id_cycle_A][1]
     act = liste_indice_depart[id_cycle_A][0]
     for i in range(liste_indice_depart[id_cycle_A][1]):
-        res[i] = liste_points[act]
+        res[i] = act
         act = liste_adjacence[act][0]
     return res
 
@@ -100,9 +114,11 @@ def nearestCycle(graph, id_cycle_A):
             if temp[2] < min_energy_cycle:
 
                 min_energy_cycle = temp[2]
-                edge_A = [liste_de_point.index(temp[0][0]), liste_de_point.index(temp[0][1])]
-                edge_B = [liste_de_point.index(temp[1][0]), liste_de_point.index(temp[1][1])]
+                edge_A = [temp[0][0], temp[0][1]]
+                edge_B = [temp[1][0], temp[1][1]]
                 reversed = temp[3]
+                patch_pattern = temp[4]
+
 
             """
             liste_energy.append(min_energy_cycle)
@@ -119,7 +135,7 @@ def nearestCycle(graph, id_cycle_A):
     minId = liste_energy.index(min(liste_energy))
     return liste_energy[minId], *liste_edges[minId]
     """
-    return reversed, edge_A, edge_B#, min_energy_cycle
+    return reversed, edge_A, edge_B, patch_pattern#, min_energy_cycle
 
 def nearestEdge2(id_cycle_A, edge_A, id_cycle_B, expected = None):
     """
@@ -164,18 +180,23 @@ def nearestEdge4(cycle_A, cycle_B):
     renvoie les deux edges les + proches entre cycle A et cycle B
     """
     
-    edge_A, edge_B = [cycle_A[-1], cycle_A[0]], [cycle_B[-1], cycle_B[0]]
-    min_energy, reversed = energyid_cycle_Calc_2(edge_A, edge_B)
+    global liste_adjacence
 
-    for id_point_A in range(len(cycle_A)-1):
-        for id_point_B in range((len(cycle_B))-1):
-            temp = energyid_cycle_Calc_2([cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]])
+    edge_A, edge_B = [cycle_A[-1], cycle_A[0]], [cycle_B[-1], cycle_B[0]]
+    min_energy, reversed, patch_pattern = energyid_cycle_Calc_2(edge_A, edge_B)
+
+    for id_point_A in range(len(cycle_A)):
+        for id_point_B in range((len(cycle_B))):
+            point_A = cycle_A[id_point_A - 1]
+            point_B = cycle_B[id_point_B - 1]
+            temp = energyid_cycle_Calc_2([point_A, liste_adjacence[point_A][0]], [point_B, liste_adjacence[point_B][0]])
             if temp[0] < min_energy:
                 min_energy = temp[0]
                 reversed = temp[1]
-                edge_A, edge_B = [cycle_A[id_point_A], cycle_A[id_point_A + 1]], [cycle_B[id_point_B], cycle_B[id_point_B + 1]]
+                patch_pattern = temp[2]
+                edge_A, edge_B = [point_A, liste_adjacence[point_A][0]], [point_B, liste_adjacence[point_B][0]]
 
-    return edge_A, edge_B, min_energy, reversed
+    return edge_A, edge_B, min_energy, reversed, patch_pattern
 
 
 def isPrecedent(point_1, point_2):
@@ -293,20 +314,19 @@ def stitchEdges_2(graph):
     print(norm2(liste_points[82], liste_points[83]), norm2(liste_points[100], liste_points[101]))
     print(norm2(liste_points[82], liste_points[100]), norm2(liste_points[83], liste_points[101]))
     print(norm2(liste_points[82], liste_points[101]), norm2(liste_points[83], liste_points[100]))
-    """        
+    """
+
+    #for i in tqdm(range(1)):
     for i in tqdm(range(len(liste_indice_depart)-1)):
     #while len(liste_indice_depart) > 1:
-        reversed, edge1_ids, edge2_ids = nearestCycle(graph, id_cycle_depart)
+        reversed, edge1_ids, edge2_ids, patch_pattern = nearestCycle(graph, id_cycle_depart)
         
         cycle_A_id, cycle_B_id = selectIdCycle(edge1_ids[0]), selectIdCycle(edge2_ids[0])
         
         id_first_point = edge2_ids[0]
         
         if reversed:
-            reverse_2(edge1_ids[0])
-            patch_pattern = 'pattern_1'
-        else:
-            patch_pattern = 'pattern_2'
+            reverse_2(edge2_ids[0])
         #patch_pattern = selectCorrectPatchPattern_3(edge1_ids, edge2_ids)
 
         # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
@@ -333,7 +353,7 @@ def stitchEdges_2(graph):
         next_point_id = liste_adjacence[current_point_id][0]
         # print(lines[-1])
         
-    print(lines)
+    #print(lines)
     
     new_path = svgpt.Path(*lines)
     return new_path
