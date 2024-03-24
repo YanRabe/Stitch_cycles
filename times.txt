@@ -19,3 +19,15 @@ simple : 0 h, 0 min, 0.046855926513671875 s
 brain_cycles : 0 h, 1.0 min, 30.849547147750854 s 
 
 
+en O(n**3)
+simple : 0 h, 0 min, 0.026783466339111328 s 
+simple_reverse : 0 h, 0 min, 0.007999897003173828 s 
+brain_cycles : 0 h, 24.0 min, 34.668867349624634 s 
+
+
+en O(n**4)
+simple : 0 h, 0 min, 0.027742862701416016 s 
+simple_reverse : 0 h, 0 min, 0.010001420974731445 s 
+brain_cycles : 0 h, 2.0 min, 29.65351700782776 s 
+
+

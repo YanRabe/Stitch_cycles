@@ -137,6 +137,45 @@ def nearestCycle(graph, id_cycle_A):
     """
     return reversed, edge_A, edge_B, patch_pattern#, min_energy_cycle
 
+def nearestCycle_2(graph, id_cycle_A):
+    
+    """
+    graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
+    id_cycle_A est l'indice du cycle dont on cherche le voisin le + proche;
+    """
+    liste_de_point, liste_adjacence, liste_indice_depart = graph
+    liste_energy = []
+    liste_edges = []
+    """
+    print(len(liste_indice_depart), id_cycle_A)
+
+    if len(liste_indice_depart) < id_cycle_A:
+        print(liste_indice_depart)
+    """
+
+    cycle_A = listCoord(graph, id_cycle_A)
+    min_energy_cycle = inf
+    edge_A, edge_B = None, None
+    reversed = None
+
+    for id_point_A in cycle_A:
+        edge_A_test = [id_point_A, liste_adjacence[id_point_A][0]]
+
+        for id_point_B in range(len(liste_de_point)):
+            #id_cycle_B = selectIdCycle(id_point_B)
+            
+            if id_point_B not in cycle_A:
+                edge_B_test = [id_point_B, liste_adjacence[id_point_B][0]]
+                temp = energyid_cycle_Calc_2(edge_A_test, edge_B_test)
+                if temp[0] <= min_energy_cycle:
+                    min_energy_cycle = temp[0]
+                    edge_A = edge_A_test
+                    edge_B = edge_B_test
+                    reversed = temp[1]
+                    patch_pattern = temp[2]
+
+    return reversed, edge_A, edge_B, patch_pattern
+
 def nearestEdge2(id_cycle_A, edge_A, id_cycle_B, expected = None):
     """
     edge_A = liste de 2 complexes (coords);
