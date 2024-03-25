@@ -11,26 +11,31 @@ path = svgh.pointCoord("svg_entries/svg/simple.svg")
 graph1 = svgh.cyclesToGraph("svg_entries/svg/simple.svg")
 graph1_np = svgh_np.cyclesToGraph("svg_entries/svg/simple.svg")
 
-cycle_A = graph1[0:6]
-cycle_B = graph1[6:12]
+# cycle_A = graph1[0:6]
+# cycle_B = graph1[6:12]
 
 #print(sb.nearestEdge3(cycle_A, cycle_B))
+# print('python:',sb.listCoord(graph1,1))
+#print('numpy',sb_np.np_listCoord(graph1_np,1))
 
-cycle_A_np = graph1_np[0:6]
-cycle_B_np = graph1_np[6:12]
+
+# cycle_A_np = graph1_np[0:6]
+# cycle_B_np = graph1_np[6:12]
 
 array_de_point, array_d_adjacence, array_indice_depart = graph1_np
-res = np.empty((0,2))
-act = array_indice_depart[0,0]
-prueba = array_de_point[act]
-inter = np.vstack((res,prueba))
+#print(array_de_point[8],array_de_point[array_d_adjacence[8,0]])
 
 #print(sb_np.np_nearestEdge3(cycle_A_np, cycle_B_np))
-print(sb.nearestCycle(graph1,0))
+#print(sb.nearestCycle(graph1,0))
 
-print(sb_np.np_nearestCycle(graph1_np,0))
+#print(sb_np.np_nearestCycle(graph1_np,0))
 
-##
-import numpy as np
-a = np.array([[1,2],[3,4],[4,4],[5,6],[4,4]])
-print(np.where(a==[4,4]))
+# test fonction edges
+#E = np.zeros((3,2,2))
+# E[0,0] = array_de_point[0]
+# E[0,1] = array_de_point[array_d_adjacence[0,0]]
+# E = sb_np.edges(graph1_np)
+# edge = np.array([array_de_point[0],array_de_point[array_d_adjacence[0,0]]])
+# modif_E = np.delete(E,0,0)
+
+print(sb_np.np_nearestEdge4(graph1_np,0,sb_np.edges(graph1_np)))
