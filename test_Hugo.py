@@ -28,7 +28,7 @@ path = svgh.pointCoord("svg_entries\svg\simple.svg")
 
 """
 debut = time.time()
-filename = "bunny_small_cycles"
+filename = "brain_cycles_test"
 graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
 # test = sb.nearestCycle(graph, 0)
 
@@ -45,7 +45,7 @@ print(tempsStr)
 """
 monF = open("times.txt", "a", encoding="utf-8")
 
-for i in range(4,5):
+for i in range(3):
     filename = liste_names[i]
     debut = time.time()
     graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
