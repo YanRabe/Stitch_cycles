@@ -1,6 +1,4 @@
 from math import inf
-import svg_handler as svgh
-import numpy as np
 import svgpathtools as svgpt
 from tqdm import tqdm
 

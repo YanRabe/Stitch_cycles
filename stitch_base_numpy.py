@@ -1,12 +1,9 @@
 def test():
     pass
-from math import inf
-import svg_handler as svgh
 import numpy as np
 import svgpathtools as svgpt
 from tqdm import tqdm
 #import stitch_base as sb
-
 '''
 Cycle
 
@@ -80,16 +77,16 @@ def np_equation_droite(edge):
     Calcule l'équation de droite du segment donné en argument
     Equation de la forme : y = ax + b
     si droite verticale alors equation : x = c
-    renvoie a,b,c avec inf sur les valeurs non utilisées
+    renvoie a,b,c avec np.inf sur les valeurs non utilisées
     """
     x1, x2 = edge[0,0], edge[1,0]
     y1, y2 = edge[0,1], edge[1,1]
     if x1 == x2:
-        a, b, c = inf, inf, x1
+        a, b, c = np.inf, np.inf, x1
     else:
         a = (y1 - y2) / (x1 - x2)
         b = y1 - a * x1
-        c = inf
+        c = np.inf
     return a, b, c
 
 def np_intersection_segments(edge1, edge2):
