@@ -149,7 +149,7 @@ def np_nearestEdge4(graph, id_cycle_A,E):
         temp_edgeB_id = np.argmin(energy)
         #print('temp',temp_edgeB_id)
         if i >= cycle_A.shape[0]:
-            print(i-cycle_A.shape[0])
+            #print(i-cycle_A.shape[0])
             research_edge[i-cycle_A.shape[0]] = edgeA
             energy_edgeB[i-cycle_A.shape[0]] = energy[temp_edgeB_id]
             energy_id[i-cycle_A.shape[0]] = temp_edgeB_id
@@ -173,7 +173,7 @@ def np_nearestEdge4(graph, id_cycle_A,E):
     else:
 
         link = 'pattern1'
-        if np_intersection_segments(np.array([edgeA[0],edgeB[1]]),np.array([edgeA[1],edgeB[0]])):
+        if np_intersection_segments(np.array([edgeA[0],edgeB[0]]),np.array([edgeA[1],edgeB[1]])):
             print('d')
             reversed = False
 
@@ -297,7 +297,7 @@ def np_merge_Cycles(id_Cycle_A,id_Cycle_B):
     """
     #print('a')
     global  array_indice_depart
-    print('id_cA',id_Cycle_A)
+    #print('id_cA',id_Cycle_A)
     depart_cycle_A = array_indice_depart[id_Cycle_A,0]
     longueur_cycle_B = array_indice_depart[id_Cycle_B,1]
     array_indice_depart[id_Cycle_A,1] += longueur_cycle_B
@@ -343,7 +343,7 @@ def stitchEdges_2(graph):
         # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
         array_d_adjacence = np_changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, array_d_adjacence)
 
-        print('id:',cycle_B_id)
+        #print('id:',cycle_B_id)
 
         cycle_B_id = np_merge_Cycles(cycle_B_id, cycle_A_id)
         id_cycle_depart = cycle_B_id
