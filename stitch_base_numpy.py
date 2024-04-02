@@ -232,7 +232,7 @@ def np_isSuivant(idpoint_1, idpoint_2):
     point_2 est l'indice d'un point du cycle dans liste_points
     """
     global array_d_adjacence
-    return array_d_adjacence[idpoint_1,1] == point_2
+    return array_d_adjacence[idpoint_1,1] == idpoint_2
 
 def np_changeAdjacence_2(edge1_id,edge2_id,patch_pattern, array_d_adjacence):
     '''
@@ -355,13 +355,13 @@ def stitchEdges_2(graph):
     first_stitch_id = array_d_adjacence[id_first_point,0]
     # print(id_first_point, liste_adjacence, first_stitch_id)
     lines = [0.]* array_de_points.shape[0]
-    lines[0] = svgpt.Line(array_de_points[id_first_point], array_de_points[first_stitch_id])
+    lines[0] = svgpt.Line(complex(*array_de_points[id_first_point]), complex(*array_de_points[first_stitch_id]))
     current_point_id = first_stitch_id
     next_point_id = array_d_adjacence[current_point_id,0]
     # print(lines[-1])
 
     for i in range(array_de_points.shape[0]):
-        lines[i] = svgpt.Line(array_de_points[current_point_id], array_de_points[next_point_id])
+        lines[i] = svgpt.Line(complex(*array_de_points[current_point_id]), complex(*array_de_points[next_point_id]))
         current_point_id = next_point_id
         next_point_id = array_d_adjacence[current_point_id,0]
         # print(lines[-1])
