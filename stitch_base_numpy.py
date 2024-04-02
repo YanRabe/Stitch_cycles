@@ -4,7 +4,8 @@ from math import inf
 import svg_handler as svgh
 import numpy as np
 import svgpathtools as svgpt
-import stitch_base as sb
+from tqdm import tqdm
+#import stitch_base as sb
 
 '''
 Cycle
@@ -147,9 +148,15 @@ def np_nearestEdge4(graph, id_cycle_A,E):
         #print('nrj',energy)
         temp_edgeB_id = np.argmin(energy)
         #print('temp',temp_edgeB_id)
-        research_edge[i] = edgeA
-        energy_edgeB[i] = energy[temp_edgeB_id]
-        energy_id[i] = temp_edgeB_id
+        if i >= cycle_A.shape[0]:
+            #print(i-cycle_A.shape[0])
+            research_edge[i-cycle_A.shape[0]] = edgeA
+            energy_edgeB[i-cycle_A.shape[0]] = energy[temp_edgeB_id]
+            energy_id[i-cycle_A.shape[0]] = temp_edgeB_id
+        else:
+            research_edge[i] = edgeA
+            energy_edgeB[i] = energy[temp_edgeB_id]
+            energy_id[i] = temp_edgeB_id
 
     #print(energy_edgeB)
     edgeB_id = energy_id[np.argmin(energy_edgeB)]
@@ -166,7 +173,7 @@ def np_nearestEdge4(graph, id_cycle_A,E):
     else:
 
         link = 'pattern1'
-        if np_intersection_segments(np.array([edgeA[0],edgeB[1]]),np.array([edgeA[1],edgeB[0]])):
+        if np_intersection_segments(np.array([edgeA[0],edgeB[0]]),np.array([edgeA[1],edgeB[1]])):
             print('d')
             reversed = False
 
@@ -232,7 +239,7 @@ def np_changeAdjacence_2(edge1_id,edge2_id,patch_pattern, array_d_adjacence):
     change la liste d'adjacence pour sticher
     '''
     global array_de_points
-    global array_d_adjacence
+    #global array_d_adjacence
     """
     print(array_d_adjacence)
     print()
@@ -288,9 +295,9 @@ def np_merge_Cycles(id_Cycle_A,id_Cycle_B):
     Fusionne 2 cycles dans la liste de cycles
     id_cycle_A/B sont les indices des cycles dans liste_indice_depart
     """
-
+    #print('a')
     global  array_indice_depart
-
+    #print('id_cA',id_Cycle_A)
     depart_cycle_A = array_indice_depart[id_Cycle_A,0]
     longueur_cycle_B = array_indice_depart[id_Cycle_B,1]
     array_indice_depart[id_Cycle_A,1] += longueur_cycle_B
@@ -319,8 +326,8 @@ def stitchEdges_2(graph):
     print(norm2(array_de_points[82], array_de_points[101]), norm2(array_de_points[83], array_de_points[100]))
     """
     for i in tqdm(range(array_indice_depart.shape[0]-1)):
-    while array_indice_depart.shape[0] > 1:
-        reversed, edge1_ids, edge2_ids = np_nearestEdge4(graph, id_cycle_depart,edges(graph))
+    #while array_indice_depart.shape[0] > 1:
+        reversed, edge1_ids, edge2_ids, patch_pattern = np_nearestEdge4(graph, id_cycle_depart,edges(graph))
 
         cycle_A_id, cycle_B_id = np_selectIdCycle(edge1_ids[0]), np_selectIdCycle(edge2_ids[0])
 
@@ -335,6 +342,8 @@ def stitchEdges_2(graph):
 
         # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
         array_d_adjacence = np_changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, array_d_adjacence)
+
+        #print('id:',cycle_B_id)
 
         cycle_B_id = np_merge_Cycles(cycle_B_id, cycle_A_id)
         id_cycle_depart = cycle_B_id

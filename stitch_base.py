@@ -2,7 +2,7 @@ from math import inf
 import svg_handler as svgh
 import numpy as np
 import svgpathtools as svgpt
-#from tqdm import tqdm
+from tqdm import tqdm
 
 """
 Cycles --> liste: 
@@ -36,7 +36,7 @@ def energyid_cycle_Calc_2(edge1, edge2):
     val2 = norm2(liste_points[edge1[0]], liste_points[edge2[0]]) + norm2(liste_points[edge1[1]], liste_points[edge2[1]])
 
     if val1 < val2:
-        res = val1# - norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1])
+        res = val1
         link = [[0,1], [1,0]]
         link = 'pattern_2'
         if not intersection_segments([edge1[0], edge2[1]], [edge1[1], edge2[0]]):
@@ -44,7 +44,7 @@ def energyid_cycle_Calc_2(edge1, edge2):
         else:
             reverse = True
     else:
-        res = val2# - norm2(edge1[0], edge1[1]) - norm2(edge2[0], edge2[1])
+        res = val2
         link = [[0,0], [1,1]]
         link = 'pattern_1'
         if not intersection_segments([edge1[0], edge2[0]], [edge1[1], edge2[1]]):
@@ -52,6 +52,7 @@ def energyid_cycle_Calc_2(edge1, edge2):
         else:
             print('d')
             reverse = False
+    res = res - norm2(liste_points[edge1[0]], liste_points[edge1[1]]) - norm2(liste_points[edge2[0]], liste_points[edge2[1]])
     return res, reverse, link
 
 def norm2(point_a, point_b):
