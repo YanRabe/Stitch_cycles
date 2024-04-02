@@ -111,4 +111,4 @@ def pathsToSvg(paths, filename):
     # lines_list = [Line(complex(*points[i][j-1]), complex(*points[i][j])) for i in range(len(points)) for j in range(len(points[i]))]
     # print(*lines_list, sep='\n \n')
     # paths = [Path(lines_list[i]) for i in range(len(lines_list))]
-    paths2svg.wsvg(paths, filename=f'outputs\ numpy_output{number_outputs + 1}_{filename}.svg')
+    paths2svg.wsvg(paths, filename=fr'outputs\numpy_output{number_outputs + 1}_{filename}.svg')

@@ -1,6 +1,7 @@
 import svg_handler_numpy as svgh_np
 import svg_handler as svgh
 import stitch_base as sb
+import stitch_base_numpy as sbn
 from svgpathtools import Path, Line
 import time
 
@@ -43,6 +44,7 @@ print(tempsStr)
 
 
 """
+"""
 monF = open("times.txt", "a", encoding="utf-8")
 
 for i in range(3):
@@ -52,6 +54,26 @@ for i in range(3):
 
     new_path = sb.stitchEdges_2(graph)
     svgh.pathsToSvg(new_path, filename)
+    fin = time.time()
+    print(fin-debut)
+    tempsStr = conversion(fin-debut)
+    monF.write(filename + " : " + tempsStr + " \n")
+    print(filename, "est fini")
+
+monF.write("\n\n")
+monF.close()
+print("fini :)")
+"""
+
+monF = open("times_numpy.txt", "a", encoding="utf-8")
+
+for i in range(3):
+    filename = liste_names[i]
+    debut = time.time()
+    graph = svgh_np.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
+
+    new_path = sbn.stitchEdges_2(graph)
+    svgh_np.pathsToSvg(new_path, filename)
     fin = time.time()
     print(fin-debut)
     tempsStr = conversion(fin-debut)
