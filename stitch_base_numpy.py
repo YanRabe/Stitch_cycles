@@ -64,7 +64,7 @@ def np_listCoord(graph,id_cycle_A):
     """
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     id_cycle_A est l'indice du cycle;
-    out : array avec indices dess points du cycle A
+    out : array avec indices des points du cycle A
     """
     # print(id_cycle_A, liste_indice_depart)
     array_de_points, array_d_adjacence,array_indice_depart = graph
@@ -135,28 +135,28 @@ def np_nearestEdge4(graph, id_cycle_A,E):
     cycle_A = np_listCoord(graph, id_cycle_A)
     E[cycle_A] = 1000
     #print(E)
-    #print(cycle_A,cycle_A.shape)
+    print(cycle_A,cycle_A.shape)
     research_edge = np.empty((cycle_A.shape[0],2,2))
     energy_edgeB = np.empty((cycle_A.shape[0]))
     energy_id = np.empty((cycle_A.shape[0]),dtype=int)
     #print('energy_edgeB:',energy_edgeB)
 
-    for i in cycle_A:
-        edgeA = np.array([array_de_points[i],array_de_points[array_d_adjacence[i,0]]])
+    for i in range(cycle_A.shape[0]):
+        edgeA = np.array([array_de_points[cycle_A[i]],array_de_points[array_d_adjacence[cycle_A[i],0]]])
         #print('edgeA',edgeA)
         energy = vectorial_energy(edgeA,E)
         #print('nrj',energy)
         temp_edgeB_id = np.argmin(energy)
         #print('temp',temp_edgeB_id)
-        if i >= cycle_A.shape[0]:
-            #print(i-cycle_A.shape[0])
-            research_edge[i-cycle_A.shape[0]] = edgeA
-            energy_edgeB[i-cycle_A.shape[0]] = energy[temp_edgeB_id]
-            energy_id[i-cycle_A.shape[0]] = temp_edgeB_id
-        else:
-            research_edge[i] = edgeA
-            energy_edgeB[i] = energy[temp_edgeB_id]
-            energy_id[i] = temp_edgeB_id
+        # if i >= cycle_A.shape[0]:
+        #     print(i-cycle_A.shape[0])
+        #     research_edge[i-cycle_A.shape[0]] = edgeA
+        #     energy_edgeB[i-cycle_A.shape[0]] = energy[temp_edgeB_id]
+        #     energy_id[i-cycle_A.shape[0]] = temp_edgeB_id
+        #else:
+        research_edge[i] = edgeA
+        energy_edgeB[i] = energy[temp_edgeB_id]
+        energy_id[i] = temp_edgeB_id
 
     #print(energy_edgeB)
     edgeB_id = energy_id[np.argmin(energy_edgeB)]
@@ -232,7 +232,7 @@ def np_isSuivant(idpoint_1, idpoint_2):
     point_2 est l'indice d'un point du cycle dans liste_points
     """
     global array_d_adjacence
-    return array_d_adjacence[idpoint_1,1] == point_2
+    return array_d_adjacence[idpoint_1,1] == idpoint_2
 
 def np_changeAdjacence_2(edge1_id,edge2_id,patch_pattern, array_d_adjacence):
     '''
@@ -355,13 +355,13 @@ def stitchEdges_2(graph):
     first_stitch_id = array_d_adjacence[id_first_point,0]
     # print(id_first_point, liste_adjacence, first_stitch_id)
     lines = [0.]* array_de_points.shape[0]
-    lines[0] = svgpt.Line(array_de_points[id_first_point], array_de_points[first_stitch_id])
+    lines[0] = svgpt.Line(complex(*array_de_points[id_first_point]), complex(*array_de_points[first_stitch_id]))
     current_point_id = first_stitch_id
     next_point_id = array_d_adjacence[current_point_id,0]
     # print(lines[-1])
 
     for i in range(array_de_points.shape[0]):
-        lines[i] = svgpt.Line(array_de_points[current_point_id], array_de_points[next_point_id])
+        lines[i] = svgpt.Line(complex(*array_de_points[current_point_id]), complex(*array_de_points[next_point_id]))
         current_point_id = next_point_id
         next_point_id = array_d_adjacence[current_point_id,0]
         # print(lines[-1])
