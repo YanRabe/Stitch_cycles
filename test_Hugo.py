@@ -67,7 +67,7 @@ print("fini :)")
 """
 
 monF = open("times_numpy.txt", "a", encoding="utf-8")
-
+""""""
 for i in range(2,3):
     filename = liste_names[i]
     debut = time.time()
