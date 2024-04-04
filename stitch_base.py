@@ -374,27 +374,19 @@ def stitchEdges_2(graph):
         
         cycle_B_id = merge_Cycles(cycle_B_id, cycle_A_id)
         id_cycle_depart = cycle_B_id
-        # ou on pred l'indice du cycle avec le - de points (+ complexe)
-
-    # print(liste_indice_depart)
 
 
     first_stitch_id = liste_adjacence[id_first_point][0]
-    # print(id_first_point, liste_adjacence, first_stitch_id)
     lines = [0.] *(len(liste_points))
     lines[0] = svgpt.Line(liste_points[id_first_point], liste_points[first_stitch_id])
     current_point_id = first_stitch_id
     next_point_id = liste_adjacence[current_point_id][0]
-    # print(lines[-1])
 
     for i in range(len(liste_points)):
         lines[i] = svgpt.Line(liste_points[current_point_id], liste_points[next_point_id])
         current_point_id = next_point_id
         next_point_id = liste_adjacence[current_point_id][0]
-        # print(lines[-1])
-        
-    #print(lines)
-    
+            
     new_path = svgpt.Path(*lines)
     return new_path
 

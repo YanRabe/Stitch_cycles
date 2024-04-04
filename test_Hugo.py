@@ -29,14 +29,14 @@ path = svgh.pointCoord("svg_entries\svg\simple.svg")
 
 """
 debut = time.time()
-filename = "brain_cycles_test"
-graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
+filename = "brain_cycle"
+graph = svgh_np.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
 # test = sb.nearestCycle(graph, 0)
 
 
-new_path = sb.stitchEdges_2(graph)
+new_path = sbn.stitchEdges_2(graph)
 fin = time.time()
-svgh.pathsToSvg(new_path, filename)
+svgh_np.pathsToSvg(new_path, filename)
 tempsStr = conversion(fin-debut)
 
 print(tempsStr)
@@ -47,7 +47,7 @@ print(tempsStr)
 """
 monF = open("times.txt", "a", encoding="utf-8")
 
-for i in range(3):
+for i in range(1,-1,-1):
     filename = liste_names[i]
     debut = time.time()
     graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
@@ -63,11 +63,12 @@ for i in range(3):
 monF.write("\n\n")
 monF.close()
 print("fini :)")
+
 """
 
 monF = open("times_numpy.txt", "a", encoding="utf-8")
 
-for i in range(3):
+for i in range(2,3):
     filename = liste_names[i]
     debut = time.time()
     graph = svgh_np.cyclesToGraph(f"svg_entries\svg\{filename}.svg")

@@ -31,3 +31,18 @@ simple_reverse : 0 h, 0 min, 0.010001420974731445 s
 brain_cycles : 0 h, 2.0 min, 29.65351700782776 s 
 
 
+simple : 0 h, 0 min, 0.005251407623291016 s 
+simple_reverse : 0 h, 0 min, 0.0 s 
+
+
+simple : 0 h, 0 min, 0.04230093955993652 s 
+simple_reverse : 0 h, 0 min, 0.008016824722290039 s 
+brain_cycles : 0 h, 1.0 min, 9.06604552268982 s 
+bunny_small_cycles : 0 h, 3.0 min, 18.90425133705139 s 
+square_cycles : 1.0 h, 20.0 min, 19.951754331588745 s 
+
+
+simple_reverse : 0 h, 0 min, 0.00799870491027832 s 
+simple : 0 h, 0 min, 0.00795602798461914 s 
+
+
