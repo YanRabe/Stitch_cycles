@@ -70,7 +70,6 @@ def listCoord(graph,id_cycle_A):
     graph est le resultat de la fonction cyclesToGraph (à changer peut-être pour 3 variables différentes);
     id_cycle_A est l'indice du cycle;
     """
-    # print(id_cycle_A, liste_indice_depart)
     liste_points, liste_adjacence, liste_indice_depart = graph
     res = [0.] * liste_indice_depart[id_cycle_A][1]
     act = liste_indice_depart[id_cycle_A][0]
@@ -264,7 +263,6 @@ def reverse_2(point):
     global liste_points
     global liste_adjacence
     
-    # print(liste_adjacence)
     id_depart = point
     point_actuel = point
     prochain_point = liste_adjacence[point_actuel][0]
@@ -275,7 +273,6 @@ def reverse_2(point):
         prochain_point = liste_adjacence[point_actuel][0]
         liste_adjacence[point_actuel][0], liste_adjacence[point_actuel][1] = liste_adjacence[point_actuel][1], liste_adjacence[point_actuel][0]
 
-    # print(liste_adjacence)
 
 
 def selectCorrectPatchPattern_3(edge1, edge2):
@@ -354,7 +351,6 @@ def stitchEdges_2(graph):
     print(norm2(liste_points[82], liste_points[101]), norm2(liste_points[83], liste_points[100]))
     """
 
-    #for i in tqdm(range(1)):
     for i in tqdm(range(len(liste_indice_depart)-1)):
     #while len(liste_indice_depart) > 1:
         reversed, edge1_ids, edge2_ids, patch_pattern = nearestCycle(graph, id_cycle_depart)
@@ -365,9 +361,7 @@ def stitchEdges_2(graph):
         
         if reversed:
             reverse_2(edge2_ids[0])
-        #patch_pattern = selectCorrectPatchPattern_3(edge1_ids, edge2_ids)
 
-        # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
         liste_adjacence = changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, liste_adjacence)
         
         cycle_B_id = merge_Cycles(cycle_B_id, cycle_A_id)
@@ -459,7 +453,6 @@ def merge_Cycles(id_Cycle_A,id_Cycle_B):
     return selectIdCycle(depart_cycle_A)
 
 
-# méthode d'équation de droites + comment faire pour droite verticale ?
     
 def equation_droite(edge):
     """

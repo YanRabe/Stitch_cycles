@@ -63,7 +63,6 @@ def np_listCoord(graph,id_cycle_A):
     id_cycle_A est l'indice du cycle;
     out : array avec indices des points du cycle A
     """
-    # print(id_cycle_A, liste_indice_depart)
     global array_d_adjacence
     global array_indice_depart
 
@@ -133,35 +132,19 @@ def np_nearestEdge4(graph, id_cycle_A,E):
     '''
     array_de_points, array_d_adjacence, array_indice_depart = graph
     cycle_A = np_listCoord(graph, id_cycle_A)
-    # print(array_indice_depart, id_cycle_A, cycle_A.shape)
     E[cycle_A] = 1000
-    # print()
-    # print(cycle_A,cycle_A.shape)
-    # print(E)
     research_edge = np.empty((cycle_A.shape[0],2,2))
     energy_edgeB = np.empty((cycle_A.shape[0]))
     energy_id = np.empty((cycle_A.shape[0]),dtype=int)
-    #print('energy_edgeB:',energy_edgeB)
 
     for i in range(cycle_A.shape[0]):
         edgeA = np.array([array_de_points[cycle_A[i]],array_de_points[array_d_adjacence[cycle_A[i],0]]])
-        #print('edgeA',edgeA)
         energy = vectorial_energy(edgeA,E)
-        #print('nrj',energy)
 
         compt = 0
         for val_id in cycle_A:
             energy[val_id] = np.inf
-            # compt += 1
-        # print("compteur d'inf", compt)
         temp_edgeB_id = np.argmin(energy)
-        #print('temp',temp_edgeB_id)
-        # if i >= cycle_A.shape[0]:
-        #     print(i-cycle_A.shape[0])
-        #     research_edge[i-cycle_A.shape[0]] = edgeA
-        #     energy_edgeB[i-cycle_A.shape[0]] = energy[temp_edgeB_id]
-        #     energy_id[i-cycle_A.shape[0]] = temp_edgeB_id
-        #else:
         research_edge[i] = edgeA
         energy_edgeB[i] = energy[temp_edgeB_id]
         energy_id[i] = temp_edgeB_id
@@ -175,12 +158,7 @@ def np_nearestEdge4(graph, id_cycle_A,E):
             print(energy)
         """
 
-    # print(energy_edgeB)
-    # print(min(energy_edgeB))
-    # print("argmin", np.argmin(energy_edgeB))
     edgeB_id = energy_id[np.argmin(energy_edgeB)]
-    #print(edgeB_id)
-    # print("valeur correcte",research_edge[np.argmin(energy_edgeB)])
     edgeA, edgeB = research_edge[np.argmin(energy_edgeB)] , E[edgeB_id]
 
     reversed = True
@@ -214,7 +192,6 @@ def np_selectIdCycle(id_Point):
     global array_d_adjacence
     global array_indice_depart
 
-    liste_verif = [False for i in range(array_d_adjacence.shape[0])]
 
     """
     print("\nB")
@@ -224,16 +201,12 @@ def np_selectIdCycle(id_Point):
 
     indice_cycle_actuel = 0
     for cycle in array_indice_depart:
-        # print("cycle", cycle)
         point_actuel = cycle[0]
         for i in range(cycle[1]):
-            liste_verif[point_actuel] = True
             if array_d_adjacence[point_actuel,0] == id_Point:
-                # print("F")
                 return indice_cycle_actuel
             point_actuel = array_d_adjacence[point_actuel,0]
         indice_cycle_actuel += 1
-    # print("verif", detection_erreur(liste_verif))
     return indice_cycle_actuel
 
 def reverse_2(point):
@@ -244,7 +217,6 @@ def reverse_2(point):
     #global liste_points
     global array_d_adjacence
 
-    # print(array_d_adjacence)
     id_depart = point
     point_actuel = point
     prochain_point = array_d_adjacence[point_actuel][0]
@@ -329,14 +301,12 @@ def np_merge_Cycles(id_Cycle_A,id_Cycle_B):
     Fusionne 2 cycles dans la liste de cycles
     id_cycle_A/B sont les indices des cycles dans liste_indice_depart
     """
-    # print('\na')
     global  array_indice_depart
-    #print('id_cA',id_Cycle_A)
+
     depart_cycle_A = array_indice_depart[id_Cycle_A,0]
     longueur_cycle_B = array_indice_depart[id_Cycle_B,1]
     array_indice_depart[id_Cycle_A,1] += longueur_cycle_B
     array_indice_depart = np.delete(array_indice_depart,id_Cycle_B,axis=0)
-    # print("merge")
     return np_selectIdCycle(depart_cycle_A)
 
 def stitchEdges_2(graph):
@@ -355,11 +325,8 @@ def stitchEdges_2(graph):
 
     for i in tqdm(range(array_indice_depart.shape[0]-1)):
     #while array_indice_depart.shape[0] > 1:
-        # print('\n', id_cycle_depart)
         reversed, edge1_ids, edge2_ids, patch_pattern = np_nearestEdge4(graph, id_cycle_depart,edges(graph))
-        # print("select")
         cycle_A_id, cycle_B_id = np_selectIdCycle(edge1_ids[0]), np_selectIdCycle(edge2_ids[0])
-        # print(cycle_A_id, cycle_B_id)
 
         id_first_point = edge2_ids[0]
 
@@ -370,16 +337,10 @@ def stitchEdges_2(graph):
             # patch_pattern = 'pattern_2'
         #patch_pattern = selectCorrectPatchPattern_3(edge1_ids, edge2_ids)
 
-        # si on met liste_adjacence en global pk la mettre en paramètre de la fonction ?
         array_d_adjacence = np_changeAdjacence_2(edge1_ids, edge2_ids, patch_pattern, array_d_adjacence)
 
-        # print(array_indice_depart, cycle_B_id)
         cycle_B_id = np_merge_Cycles(cycle_B_id, cycle_A_id)
-        # print(array_indice_depart, cycle_B_id)
         id_cycle_depart = cycle_B_id
-        # print("id_cycle_depart",id_cycle_depart)
-        # print("boucle")
-
 
 
     first_stitch_id = array_d_adjacence[id_first_point,0]
