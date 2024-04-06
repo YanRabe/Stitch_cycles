@@ -44,10 +44,9 @@ print(tempsStr)
 
 
 """
-"""
 monF = open("times.txt", "a", encoding="utf-8")
 
-for i in range(1,-1,-1):
+for i in range(3,4):
     filename = liste_names[i]
     debut = time.time()
     graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
@@ -67,7 +66,7 @@ print("fini :)")
 """
 
 monF = open("times_numpy.txt", "a", encoding="utf-8")
-""""""
+
 for i in range(2,3):
     filename = liste_names[i]
     debut = time.time()
@@ -84,3 +83,4 @@ for i in range(2,3):
 monF.write("\n\n")
 monF.close()
 print("fini :)")
+"""
