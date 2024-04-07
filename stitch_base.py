@@ -32,14 +32,13 @@ def calcul_energie_2(edge1, edge2):
 
     val1 = norm2(liste_points[edge1[0]], liste_points[edge2[1]]) + norm2(liste_points[edge1[1]], liste_points[edge2[0]])
     val2 = norm2(liste_points[edge1[0]], liste_points[edge2[0]]) + norm2(liste_points[edge1[1]], liste_points[edge2[1]])
+    reverse = False
 
     if val1 < val2:
         res = val1
         # [[0,1], [1,0]]
         link = 'pattern_2'
-        if not intersection_segments([edge1[0], edge2[1]], [edge1[1], edge2[0]]):
-            reverse = False
-        else:
+        if intersection_segments([edge1[0], edge2[1]], [edge1[1], edge2[0]]):
             reverse = True
     else:
         res = val2
