@@ -5,8 +5,7 @@ import stitch_base_numpy as sbn
 from svgpathtools import Path, Line
 import time
 
-liste_names = ["simple", "simple_reverse", "brain_cycles", "bunny_small_cycles", "square_cycles", "dragon_cycles", "bunny_big_cycles"]
-
+liste_names = ["simple", "simple_reverse", "brain_cycles", "bunny_small_cycles", "test_1", "square_cycles", "dragon_cycles", "bunny_big_cycles"]
 
 def conversion(time):
     res = [0, 0, time]
@@ -29,7 +28,7 @@ path = svgh.pointCoord("svg_entries\svg\simple.svg")
 
 
 debut = time.time()
-filename = "dessin"
+filename = "creeper"
 graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
 # test = sb.nearestCycle(graph, 0)
 
@@ -46,7 +45,7 @@ print(tempsStr)
 
 monF = open("times.txt", "a", encoding="utf-8")
 
-for i in range(4):
+for i in range(5):
     filename = liste_names[i]
     debut = time.time()
     graph = svgh.cyclesToGraph(f"svg_entries\svg\{filename}.svg")
@@ -61,7 +60,8 @@ for i in range(4):
 
 monF.write("\n\n")
 monF.close()
-print("fini :)")
+# print("fini :\)")
+
 """
 """
 

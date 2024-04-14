@@ -56,3 +56,9 @@ brain_cycles : 0 h, 0 min, 57.48349142074585 s
 bunny_small_cycles : 0 h, 2.0 min, 42.89196443557739 s 
 
 
+simple : 0 h, 0 min, 0.027228593826293945 s 
+simple_reverse : 0 h, 0 min, 0.005055665969848633 s 
+brain_cycles : 0 h, 0 min, 59.01437067985535 s 
+bunny_small_cycles : 0 h, 3.0 min, 1.1782426834106445 s 
+
+

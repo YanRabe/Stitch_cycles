@@ -309,7 +309,7 @@ def stitchEdges_2(graph):
             min_cycle = cycle
     id_cycle_depart = liste_indice_depart.index(min_cycle)
 
-
+    print("nombre de points total :", len(liste_points))
     for i in tqdm(range(len(liste_indice_depart)-1)):
     #while len(liste_indice_depart) > 1:
         reversed, edge1_ids, edge2_ids, patch_pattern = nearestCycle(id_cycle_depart)
@@ -339,6 +339,7 @@ def stitchEdges_2(graph):
         next_point_id = liste_adjacence[current_point_id][0]
 
     new_path = svgpt.Path(*lines)
+    print("\ncycles à la fin de l'éxécution : ",liste_indice_depart)
     return new_path
 
 def changeAdjacence_2(edge1_id,edge2_id,patch_pattern):
