@@ -1,1 +1,27 @@
-.vscode
+# Environment variables and secrets
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+secret*.json
+client_secret*.json
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.pytest_cache/
+
+# OS generated files
+.DS_Store
+Thumbs.db
